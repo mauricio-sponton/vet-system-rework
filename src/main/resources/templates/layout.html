@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	th:with="version=${#strings.randomAlphanumeric(3)}">
+<head>
+<title>Vet System</title>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="icon" th:href="@{/image/favicon.png}" />
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css(v=${version}) }" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" rel="stylesheet"/>
+<!-- jQueryUI (autocomplete) -->
+<link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+<!-- Icons fontawesome -->
+<link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link th:href="@{/css/style-home.css(v=${version}) }" rel="stylesheet" />
+<link th:href="@{/css/tabs.css(v=${version}) }" rel="stylesheet" />
+<link th:href="@{/css/tabstyles.css(v=${version}) }" rel="stylesheet" />
+<!-- css agenda full calendar -->
+<link th:href="@{/css/calendar.css(v=${version}) }" rel="stylesheet" />
+
+</head>
+<body  style="min-height: 110vh;" id="scrollbar-body">
+	<!--  <header th:replace="fragments/header :: cabecalho">
+	
+		<div>header</div>
+	</header>-->
+
+	<div class = "menu_lateral" th:replace="fragments/menu :: menu">
+		<div>menu</div>
+	</div>
+	
+	<div class="layout-main">	
+		<section layout:fragment="corpo">		
+			<div>conteudo principal das páginas</div>
+		</section>		
+	</div>
+	 
+	<span th:replace="fragments/modal-confirm :: modal-confirm"></span>
+	
+	
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script th:src="@{/webjars/jquery/jquery.min.js(v=${version}) }"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js(v=${version}) }"></script>
+	<!-- jQueryUI (autocomplete) -->
+	<script src='https://code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
+	<!-- 	Datatables JS -->
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+	<script	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script	src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script	src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
+	<script src="/webjars/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
+	<script src="https://code.highcharts.com/highcharts.src.js"></script>
+	<!-- 	MEUS JS -->
+	<script th:src="@{/js/cbpFWTabs.js(v=${version})}"></script>
+	<!-- js agenda full calendar -->
+	<script th:src="@{/js/calendar.js(v=${version})}"></script>
+	<script th:src="@{/js/custom-file-input.js(v=${version})}"></script>
+	<script th:src="@{/js/locales/pt-br.js(v=${version})}"></script>
+	<script th:replace=":: js"></script>
+	<script th:replace=":: inlinescript" th:inline="javascript"></script> 
+	<script src="http://jqueryvalidation.org/files/dist/jquery.validate.js"></script>
+	
+
+	<script type="text/javascript">
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip()			
+		});
+		
+		var url = '';
+		
+		$('table').on('click', 'a', function() {
+			url = $(this).attr('href');
+		});
+		
+		$("#btnOk").on('click', function() {
+			document.location.href = url;
+		});
+		
+		$("#btnCancel").on('click', function() {
+			url = '';
+		});	
+		(function() {
+
+			[].slice.call( document.querySelectorAll( '.tabs' ) ).forEach( function( el ) {
+				new CBPFWTabs( el );
+			});
+
+		})();
+		$(document).ready(function(){
+			var referrer =  document.referrer;
+			var location = window.location.href;
+			
+			if(referrer.startsWith("http://localhost:8080/pacientes/visualizar")){
+				$("#por-paciente").removeClass('por-paciente')
+				$("#por-consulta").addClass('por-consulta');
+			}else{
+				$("#por-paciente").addClass('por-paciente');
+				$("#por-consulta").removeClass('por-consulta')
+			}
+			
+				switch(location){
+				case "http://localhost:8080/home":
+					$('.home, .home i').css('color', '#50B969')
+					break;
+				case "http://localhost:8080/agenda/abrir":
+					$('.agenda, .agenda i').css('color', '#50B969');
+					break;
+				case "http://localhost:8080/pacientes/listar":
+					$('.pacientes, .pacientes i').css('color', '#50B969');
+					$('a').removeClass('collapsed')
+					$('.nav-second-level').collapse('show')
+					break;
+				case "http://localhost:8080/especies/listar":
+					$('.especies, .especies i').css('color', '#50B969');
+					$('a').removeClass('collapsed')
+					$('.nav-second-level').collapse('show')
+					break;
+				case "http://localhost:8080/racas/listar":
+					$('.racas, .racas i').css('color', '#50B969');
+					$('a').removeClass('collapsed')
+					$('.nav-second-level').collapse('show')
+					break;
+				case "http://localhost:8080/u/listar":
+					$('.usuarios, .usuarios i').css('color', '#50B969');
+					break;
+				case "http://localhost:8080/clientes/listar":
+					$('.clientes, .clientes i').css('color', '#50B969');
+					break;
+				case "http://localhost:8080/consultas/listar":
+					$('.consultas, .consultas i').css('color', '#50B969');
+					break;
+				case "http://localhost:8080/internacoes/listar":
+					$('.internacoes, .internacoes i').css('color', '#50B969');
+					break;
+				case "http://localhost:8080/vacinas/listar":
+					$('.imunizacoes, .imunizacoes i').css('color', '#50B969');
+					break;
+				}
+				
+				
+			
+		});
+		(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);
+
+	
+	</script>
+</body>
+</html>

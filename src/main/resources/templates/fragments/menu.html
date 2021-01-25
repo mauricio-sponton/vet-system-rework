@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+	<nav th:fragment="menu"
+		class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+
+
+		<a class="navbar-brand" href="#"> <img
+			th:src="@{/image/logo-vet-system.png}" class="img_login"
+			alt="Veterinária consultando cachorro." />
+		</a>
+
+		<div class="bem-vindo-user">
+
+			<div th:switch="${currentRole}" sec:authorize="isAuthenticated()">
+				<div sec:authorize="hasAuthority('VETERINARIO')"
+					th:if="${veterinario.nome != null}">
+					<div th:if="${veterinario.sexo == 'Feminino'}">
+						<span style="color: white; font-size: 20px; float: left">Bem-vinda, <span class="" th:text="${veterinario.nome}"> </span>
+						</span>
+					</div>
+					<div th:if="${veterinario.sexo == 'Masculino'}">
+						<span style="color: white; font-size: 20px; float: left">Bem-vindo, <span class="" th:text="${veterinario.nome}"> </span>
+						</span>
+					</div>
+
+				</div>
+				<div sec:authorize="hasAuthority('SECRETARIA')"
+					th:if="${secretaria.nome != null}">
+					<div th:if="${secretaria.sexo == 'Feminino'}">
+						<span style="color: white; font-size: 20px;">Bem-vinda, <span
+							class="" th:text="${secretaria.nome}"> </span>
+						</span>
+					</div>
+					<div th:if="${secretaria.sexo == 'Masculino'}">
+						<span style="color: white; font-size: 20px; float: left">Bem-vindo, <span class="" th:text="${secretaria.nome}"> </span>
+						</span>
+					</div>
+
+				</div>
+				<div 
+							th:if="${#authorization.expression('hasAuthority(''ADMIN'')') 
+							&& #authorization.expression('!hasAuthority(''VETERINARIO'')')  
+							&& #authorization.expression('!hasAuthority(''SECRETARIA'')')}">
+				<span style="color: white; font-size: 20px; float: left" >Olá, 
+				<span sec:authentication="name"> </span>
+				</span>
+					
+				</div>
+			</div>
+		</div>
+		<div class="wrap-bell">
+			<a class="notify" th:href="@{/u/notificacoes}" role="button"
+				sec:authorize="hasAnyAuthority('VETERINARIO, SECRETARIA')"> <span
+				class="notification"> </span>
+			</a><span class="badge badge-danger" th:if="${notify != 0}"
+				th:text="${notify}"></span> <span class="badge badge-danger"
+				th:if="${notifyVet != 0}" th:text="${notifyVet}"></span>
+		</div>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarCollapse" aria-controls="navbarCollapse"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav mr-auto sidenav" id="navAccordion">
+
+				<li><a th:href="@{/home}" class="nav-link one home" href="#">
+						<i class="fas fa-clinic-medical"></i> Dashboard
+				</a></li>
+
+				<li><a th:href="@{/agenda/abrir}"
+					sec:authorize="hasAnyAuthority('VETERINARIO, SECRETARIA')"
+					class="nav-link agenda"> <i class="fas fa-clock"></i> Agenda
+				</a></li>
+
+				<li><a th:href="@{/u/listar}" class="nav-link usuarios"> <i
+						class="fas fa-user-md"></i> Usuários
+				</a></li>
+
+				<li><a th:href="@{/perfis/listar}" sec:authorize="hasAuthority('ADMIN_WRITE')" class="nav-link usuarios"> <i
+						class="fas fa-user-md"></i> Perfis
+				</a></li>
+
+				<li><a th:href="@{/clientes/listar}"
+					sec:authorize="hasAnyAuthority('CLIENTE_WRITE, CLIENTE_READ')"
+					class="nav-link clientes"> <i class="fas fa-handshake"></i>Clientes
+				</a></li>
+
+
+				<li><a class="nav-link nav-link-collapse pacientes especies"
+					href="#" id="hasSubItems" data-toggle="collapse"
+					sec:authorize="hasAnyAuthority('VETERINARIO, SECRETARIA')"
+					data-target="#collapseSubItems2" aria-controls="collapseSubItems2"
+					aria-expanded="false"><i class="fas fa-paw"></i> Pets</a>
+					<ul class="nav-second-level collapse " id="collapseSubItems2"
+						data-parent="#navAccordion">
+
+						<li class="nav-item"><a class="nav-link pacientes"
+							th:href="@{/pacientes/listar}"> <span class="nav-link-text">Listar
+									Pacientes</span></a></li>
+
+
+						<li class="nav-item"><a class="nav-link especies"
+							th:href="@{/especies/listar}"> <span class="nav-link-text">Listar
+									Espécies</span></a></li>
+
+
+						<li class="nav-item"><a class="nav-link racas"
+							th:href="@{/racas/listar}"> <span class="nav-link-text">Listar
+									Raças</span></a></li>
+
+
+					</ul></li>
+				<li><a sec:authorize="hasAuthority('VETERINARIO')"
+					th:href="@{/consultas/listar}" class="nav-link consultas"> <i
+						class="fas fa-file-medical-alt"></i> Consultas
+				</a></li>
+				<li><a
+					sec:authorize="hasAnyAuthority('VETERINARIO, SECRETARIA')"
+					th:href="@{/internacoes/listar}" class="nav-link internacoes"><i
+						class="fas fa-heartbeat"></i> Internações</a></li>
+
+				<li><a
+					sec:authorize="hasAnyAuthority('VETERINARIO, SECRETARIA')"
+					th:href="@{/vacinas/listar}" class="nav-link imunizacoes"> <i
+						class="fas fa-syringe"></i> Imunizações
+				</a></li>
+
+				<li><a
+					th:href="@{/u/ajuda}" class="nav-link"> <i class="fas fa-info-circle"></i> Ajuda
+				</a></li>
+
+
+
+				<form th:action="@{/logout}" sec:authorize="isAuthenticated()"
+					method="post" class="form-inline">
+
+					<button type="submit" class="dropdown-item nav-link">Sair</button>
+
+				</form>
+
+			</ul>
+
+			<div class="user-menu ml-auto">
+				<form th:action="@{/logout}" sec:authorize="isAuthenticated()"
+					method="post" class="form-inline ">
+					<div class="btn-group mb-2 mr-sm-2">
+
+						<div class="wrapper-foto"
+							th:if="${#authorization.expression('hasAuthority(''ADMIN'')') && #authorization.expression('!hasAuthority(''VETERINARIO'')')  && #authorization.expression('!hasAuthority(''SECRETARIA'')')}">
+							<img alt="" th:src="@{/image/adm.png}" class="foto-neutra" >
+
+
+						</div>
+
+						<div class="wrapper-foto" 
+							sec:authorize="hasAuthority('VETERINARIO')">
+							<img alt=""
+								th:if="${veterinario.id != null && veterinario.foto.fileName != null}"
+								th:src="@{${'/uploads/thumb/' + veterinario.foto.fileName}}">
+							<img
+								th:if="${veterinario.id != null && veterinario.foto.fileName ==null && veterinario.sexo == 'Masculino'}"
+								th:src="@{/image/default_male.png}"
+								alt="Foto de perfil do usuário."
+								class="foto-neutra" />
+							<img
+								th:if="${veterinario.id != null && veterinario.foto.fileName ==null && veterinario.sexo == 'Feminino'}"
+								th:src="@{/image/default_female.png}"
+								alt="Foto de perfil do usuário."
+								class="foto-neutra" />
+
+						</div>
+						<div class="wrapper-foto"
+							sec:authorize="hasAuthority('SECRETARIA')"
+							th:if="${secretaria != null}">
+							<img alt=""
+								th:if="${secretaria.id != null && secretaria.foto.fileName!= null}"
+								th:src="@{${'/uploads/thumb/' + secretaria.foto.fileName}}">
+							<img
+								th:if="${secretaria.id != null && secretaria.foto.fileName ==null && secretaria.sexo == 'Feminino'}"
+								th:src="@{/image/default_female.png}"
+								alt="Foto de perfil do usuário."
+								class="foto-neutra" />
+							<img
+								th:if="${secretaria.id != null && secretaria.foto.fileName ==null && secretaria.sexo == 'Masculino'}"
+								th:src="@{/image/default_male.png}"
+								alt="Foto de perfil do usuário."
+								class="foto-neutra" />
+
+						</div>
+
+						<div class="dropdown-toggle dropdown-toggle-split"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+						</div>
+
+						<div class="dropdown-menu dropdown-menu-right">
+
+							<a sec:authorize="hasAuthority('VETERINARIO')"
+								class="dropdown-item" th:href="@{/veterinarios/dados}">Meu
+								Perfil</a> <a sec:authorize="hasAuthority('SECRETARIA')"
+								class="dropdown-item" th:href="@{/secretarias/dados}">Meu
+								Perfil</a> <a class="dropdown-item" th:href="@{/u/editar/senha}">Editar
+								senha</a>
+							<button type="submit" class="dropdown-item">Sair</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+
+
+	</nav>
+
+</body>
+</html>
