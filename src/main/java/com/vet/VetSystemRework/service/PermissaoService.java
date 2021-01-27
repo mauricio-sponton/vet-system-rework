@@ -3,7 +3,6 @@ package com.vet.VetSystemRework.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.vet.VetSystemRework.domain.Permissao;
@@ -16,7 +15,7 @@ public class PermissaoService {
 	private PermissaoRepository repository;
 	
 	public List<Permissao> buscarTodasPermissoes() {
-		return repository.findAllByOrderByIdAsc();
+		return repository.findTodasPermissoes();
 	}
 
 	

@@ -29,63 +29,92 @@
 									</div>
 								</div>
 							</div>
-							<!-- 								<div class="form-group col-md-6"> -->
-							<!-- 								<label for="cliente">Dono</label> <select -->
-							<!-- 									th:classappend="${#fields.hasErrors('cliente')} ? 'is-invalid'" -->
-							<!-- 									id="cliente" class="form-control" th:field=*{cliente}> -->
-							<!-- 									<option value="">Selecione</option> -->
-							<!-- 									<option th:each="c : ${clientes}" th:value="${c.id}" -->
-							<!-- 										th:text="${c.nome}">Mauricio</option> -->
-							<!-- 								</select> -->
-							<!-- 								<div class="invalid-feedback"> -->
-							<!-- 									<span th:errors="*{cliente}"></span> -->
-							<!-- 								</div> -->
-							<!-- 							</div> -->
-							<div class="form-row">
-								<div class="form-group col-md-12">
-									<!-- 								<div th:each="p: ${permissoes}" class="form-permissoes"> -->
-									<!-- 									<input type="checkbox" th:value="${p.id}" -->
-									<!-- 										th:field="*{permissoes}"> <label th:text="${p.nome}"></label> -->
-									<!-- 								</div> -->
-									<fieldset>
-										<legend>Administrador</legend>
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" th:field="*{permissoes}"
-												value="1" id="flexCheckDefault"> <label
-												class="form-check-label" for="flexCheckDefault">
-												Acesso Total <b style="color:indigo" th:text="${permissoes[0].nome}"></b></label>
-										</div>
-									</fieldset>
-								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-12">
-									<fieldset>
-										<legend>Clientes</legend>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="checkbox" value="2" th:field="*{permissoes}"
-												id="flexCheckDefault"> <label
-												class="form-check-label" for="flexCheckDefault">
-												Acesso Total <b style="color:indigo" th:text="${permissoes[1].nome}"></b></label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="checkbox" value="3" th:field="*{permissoes}"
-												id="flexCheckDefault"> <label
-												class="form-check-label" for="flexCheckDefault">
-												Visualizar <b style="color:indigo" th:text="${permissoes[2].nome}"></b></label>
-										</div>
-										<div class="form-check form-check-inline">
-											<input class="form-check-input" type="checkbox" value="0"
-												id="flexCheckDefault"> <label
-												class="form-check-label" for="flexCheckDefault"> Sem
-												Acesso </label>
+							<table>
+								<tr>
+<!-- 									<td><div class="form-row"> -->
+<!-- 											<div class="form-group col-md-12"> -->
 
-										</div>
-									</fieldset>
-								</div>
+<!-- 												<fieldset> -->
+<!-- 													<legend>Administrador</legend> -->
+<!-- 													<div class="form-check"> -->
+<!-- 														<input class="form-check-input" type="checkbox" -->
+<!-- 															th:field="*{permissoes}" value="1" name="row-admin"> -->
+<!-- 														<label class="form-check-label" for="flexCheckDefault"> -->
+<!-- 															Acesso Total <b style="color: indigo" -->
+<!-- 															th:text="${permissoes[0].nome}"></b> -->
+<!-- 														</label> -->
+<!-- 													</div> -->
+<!-- 												</fieldset> -->
+<!-- 											</div> -->
+<!-- 										</div></td> -->
+								</tr>
+								<tr>
+									<td><div class="form-row">
+											<div class="form-group col-md-12">
+												<fieldset>
+													<legend>Clientes</legend>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="checkbox" value="2"
+															th:field="*{permissoes}" name="row-cliente"> <label
+															class="form-check-label" for="flexCheckDefault">
+															Acesso Total <b style="color: indigo"
+															th:text="${permissoes[0].nome}"></b>
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="checkbox" value="3"
+															th:field="*{permissoes}" name="row-cliente"> <label
+															class="form-check-label" for="flexCheckDefault">
+															Visualizar <b style="color: indigo"
+															th:text="${permissoes[1].nome}"></b>
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="checkbox" value="0"
+															name="row-cliente"> <label
+															class="form-check-label" for="flexCheckDefault">
+															Sem Acesso </label>
 
-							</div>
+													</div>
+												</fieldset>
+											</div>
 
+										</div></td>
+								</tr>
+								<tr>
+									<td><div class="form-row">
+											<div class="form-group col-md-12">
+												<fieldset>
+													<legend>Espécies</legend>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="checkbox" value="4"
+															th:field="*{permissoes}" name="row-especies"> <label
+															class="form-check-label" for="flexCheckDefault">
+															Acesso Total <b style="color: indigo"
+															th:text="${permissoes[2].nome}"></b>
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="checkbox" value="5"
+															th:field="*{permissoes}" name="row-especies"> <label
+															class="form-check-label" for="flexCheckDefault">
+															Visualizar <b style="color: indigo"
+															th:text="${permissoes[3].nome}"></b>
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="checkbox" value="0"
+															name="row-cliente"> <label
+															class="form-check-label" for="flexCheckDefault">
+															Sem Acesso </label>
+
+													</div>
+												</fieldset>
+											</div>
+
+										</div></td>
+								</tr>
+							</table>
 
 
 							<input type="hidden" th:field="*{id}">
@@ -103,12 +132,30 @@
 				</div>
 			</div>
 
-
+			<!-- 								<div th:each="p: ${permissoes}" class="form-permissoes"> -->
+			<!-- 									<input type="checkbox" th:value="${p.id}" -->
+			<!-- 										th:field="*{permissoes}"> <label th:text="${p.nome}"></label> -->
+			<!-- 								</div> -->
 		</main>
 	</section>
 	<script th:src="@{/js/usuario.js(v=${version})}" th:fragment="js"></script>
 	<script th:inline="javascript" th:fragment="inlinescript">
-		
+		$(document).ready(
+				function() {
+					$('#form-permissoes input[type="checkbox"]').on(
+							'change',
+							function() {
+								var checkedValue = $(this).prop('checked');
+								// uncheck sibling checkboxes (checkboxes on the same row)
+								$(this).closest('tr').find(
+										'input[type="checkbox"]').each(
+										function() {
+											$(this).prop('checked', false);
+										});
+								$(this).prop("checked", checkedValue);
+
+							});
+				});
 	</script>
 </body>
 </html>
