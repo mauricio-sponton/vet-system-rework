@@ -8,8 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.vet.VetSystemRework.domain.Perfil;
-import com.vet.VetSystemRework.service.PerfilService;
+
 import com.vet.VetSystemRework.service.UsuarioService;
 
 
@@ -29,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
 		.antMatchers("/").permitAll()
 		.antMatchers("/u/p/**").permitAll()
-		.antMatchers("/perfis/listar").hasAuthority("ADMIN_WRITE")
+		.antMatchers("/perfis/**").hasAuthority("ADMIN_WRITE")
 		.antMatchers("/clientes/**").hasAuthority("CLIENTE_WRITE")
 		.antMatchers("/clientes/listar").hasAnyAuthority("CLIENTE_WRITE, CLIENTE_READ")
 		

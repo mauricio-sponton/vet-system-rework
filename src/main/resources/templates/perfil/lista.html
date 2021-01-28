@@ -4,158 +4,82 @@
 
 <head>
 <meta charset="UTF-8" />
-<title>Vet System - Usuários Cadastrados</title>
+<title>Vet System - Perfis Cadastrados</title>
 </head>
 <body>
 	<section class="layout-content" layout:fragment="corpo">
 		<main role="main">
-
 			<div class="container">
+
 				<div class="row">
 					<div class="col-md-12">
 
-						<h1 style="color: red">Oi</h1>
-						<form th:action="@{/perfis/salvar}" th:object="${perfil}"
-							method="POST" id="form-permissoes" style="width: 100%">
+						<div th:replace="fragments/alert :: alerta-sucesso"></div>
+						<h2 class="clientes-cadastrados">Perfis Cadastrados</h2>
 
-							<div class="mb-3">
-								<label for="email">Descrição</label>
-								<div class="input-group">
-									<input type="text" class="form-control" id="desc"
-										th:field="*{desc}" placeholder="Descrição"
-										th:classappend="${#fields.hasErrors('desc')} ? 'is-invalid'" />
-									<div class="invalid-feedback">
-										<span th:errors="*{desc}"></span>
-									</div>
-								</div>
-							</div>
-							<table>
+						<table id="table-perfis"
+							class="table table-sm table-striped nowrap"
+							style="width: 100%">
+							<thead class="thead-dark">
 								<tr>
-<!-- 									<td><div class="form-row"> -->
-<!-- 											<div class="form-group col-md-12"> -->
-
-<!-- 												<fieldset> -->
-<!-- 													<legend>Administrador</legend> -->
-<!-- 													<div class="form-check"> -->
-<!-- 														<input class="form-check-input" type="checkbox" -->
-<!-- 															th:field="*{permissoes}" value="1" name="row-admin"> -->
-<!-- 														<label class="form-check-label" for="flexCheckDefault"> -->
-<!-- 															Acesso Total <b style="color: indigo" -->
-<!-- 															th:text="${permissoes[0].nome}"></b> -->
-<!-- 														</label> -->
-<!-- 													</div> -->
-<!-- 												</fieldset> -->
-<!-- 											</div> -->
-<!-- 										</div></td> -->
+									<th scope="col">Descrição</th>
+									<th scope="col" class="hide-coluna">Editar</th>
+									<th scope="col" class="hide-coluna">Excluir</th>
+									<th scope="col" class="hide-coluna">Visualizar</th>
 								</tr>
-								<tr>
-									<td><div class="form-row">
-											<div class="form-group col-md-12">
-												<fieldset>
-													<legend>Clientes</legend>
-													<div class="form-check form-check-inline">
-														<input class="form-check-input" type="checkbox" value="2"
-															th:field="*{permissoes}" name="row-cliente"> <label
-															class="form-check-label" for="flexCheckDefault">
-															Acesso Total <b style="color: indigo"
-															th:text="${permissoes[0].nome}"></b>
-														</label>
-													</div>
-													<div class="form-check form-check-inline">
-														<input class="form-check-input" type="checkbox" value="3"
-															th:field="*{permissoes}" name="row-cliente"> <label
-															class="form-check-label" for="flexCheckDefault">
-															Visualizar <b style="color: indigo"
-															th:text="${permissoes[1].nome}"></b>
-														</label>
-													</div>
-													<div class="form-check form-check-inline">
-														<input class="form-check-input" type="checkbox" value="0"
-															name="row-cliente"> <label
-															class="form-check-label" for="flexCheckDefault">
-															Sem Acesso </label>
-
-													</div>
-												</fieldset>
-											</div>
-
-										</div></td>
-								</tr>
-								<tr>
-									<td><div class="form-row">
-											<div class="form-group col-md-12">
-												<fieldset>
-													<legend>Espécies</legend>
-													<div class="form-check form-check-inline">
-														<input class="form-check-input" type="checkbox" value="4"
-															th:field="*{permissoes}" name="row-especies"> <label
-															class="form-check-label" for="flexCheckDefault">
-															Acesso Total <b style="color: indigo"
-															th:text="${permissoes[2].nome}"></b>
-														</label>
-													</div>
-													<div class="form-check form-check-inline">
-														<input class="form-check-input" type="checkbox" value="5"
-															th:field="*{permissoes}" name="row-especies"> <label
-															class="form-check-label" for="flexCheckDefault">
-															Visualizar <b style="color: indigo"
-															th:text="${permissoes[3].nome}"></b>
-														</label>
-													</div>
-													<div class="form-check form-check-inline">
-														<input class="form-check-input" type="checkbox" value="0"
-															name="row-cliente"> <label
-															class="form-check-label" for="flexCheckDefault">
-															Sem Acesso </label>
-
-													</div>
-												</fieldset>
-											</div>
-
-										</div></td>
-								</tr>
-							</table>
-
-
-							<input type="hidden" th:field="*{id}">
-							<div class="form-group row">
-								<div class="col-sm-10">
-									<button type="submit" class="btn btn-primary"
-										data-toggle="tooltip" data-placement="right" title="Salvar">
-										<i class="fas fa-save"></i>
-									</button>
-								</div>
-							</div>
-						</form>
+							</thead>
+						</table>
 
 					</div>
 				</div>
 			</div>
-
-			<!-- 								<div th:each="p: ${permissoes}" class="form-permissoes"> -->
-			<!-- 									<input type="checkbox" th:value="${p.id}" -->
-			<!-- 										th:field="*{permissoes}"> <label th:text="${p.nome}"></label> -->
-			<!-- 								</div> -->
+			<a class="btn-cadastrar-usuario" href="#" role="button"
+				data-toggle="modal" data-target="#modal-perfil">Novo Perfil</a> <span
+				th:replace="perfil/modal :: modal-form"></span>
+			
 		</main>
 	</section>
-	<script th:src="@{/js/usuario.js(v=${version})}" th:fragment="js"></script>
+	<script th:src="@{/js/perfis.js(v=${version})}" th:fragment="js"></script>
 	<script th:inline="javascript" th:fragment="inlinescript">
-		$(document).ready(
-				function() {
-					$('#form-permissoes input[type="checkbox"]').on(
-							'change',
-							function() {
-								var checkedValue = $(this).prop('checked');
-								// uncheck sibling checkboxes (checkboxes on the same row)
-								$(this).closest('tr').find(
-										'input[type="checkbox"]').each(
-										function() {
-											$(this).prop('checked', false);
-										});
-								$(this).prop("checked", checkedValue);
-
-							});
-				});
+	var perfil = [[${perfil.id}]];
+	//var permissoes = [[${permissoes}]];
+	$(document).ready(function() {
+		if(perfil != null){
+			$("#modal-perfil").modal('show');
+		
+			$(".modal-title").text("Editar Perfil");
+		}
+		if(perfil == null){
+			$(".modal-title").text("Novo Perfil");
+		}
+		if ($("#msg-erro").html() != "") {
+			$("#modal-perfil").modal('show');
+			$("#msg-erro, .invalid-feedback span").css("color", "red");
+		}
+// 		$("#modal-perfil").on("show.bs.modal", function() {
+// 			if(permissoes[0] == null){
+// 				alert('b')
+// 			}
+// 		});
+		$("#modal-perfil").on("hidden.bs.modal", function() {
+			$(".is-invalid").removeClass("is-invalid").removeAttr('style');
+			$("#msg-erro").hide();
+			$('.form-check-input').prop('checked', false)
+			$("#modal-perfil").modal('hide');
+			
+			
+		});
+		
+		$(".btn-cadastrar-usuario").on("click", function(){
+			$(".form-control").val("");
+			$('.form-check-input').prop('checked', false)
+			$(".modal-title").text("Novo perfil");
+		});
+		$('#confirm-modal').on('show.bs.modal', function(){
+			$(".modal-title").text("Excluir Perfil");
+			$('#subtitulo').text('Todos usuários que possuem este perfil serão deletados!');
+		})
+	})
 	</script>
 </body>
 </html>

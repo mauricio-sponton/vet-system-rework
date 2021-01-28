@@ -2,15 +2,18 @@ package com.vet.VetSystemRework.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -35,6 +38,10 @@ public class PerfilController {
 	public String listarPerfis(Perfil perfil) {
 		return "perfil/lista";
 	}
+	@GetMapping("/datatables/server")
+	public ResponseEntity<?> listarPerfisDatatables(HttpServletRequest request) {
+		return ResponseEntity.ok(service.buscarTodos(request));
+	}
 	@ModelAttribute("permissoes")
 	public List<Permissao> getPermissoes(){
 		return permissaoService.buscarTodasPermissoes();
@@ -57,6 +64,17 @@ public class PerfilController {
 			attr.addFlashAttribute("falha", "Cadastro não realizado pois perfil já existe");
 		}
 
+		return "redirect:/perfis/listar";
+	}
+	@GetMapping("/editar/{id}")
+	public String preEditar(@PathVariable("id") Long id, ModelMap model) {
+		model.addAttribute("perfil", service.buscarPorId(id));
+		return "perfil/lista";
+	}
+	@GetMapping("/excluir/{id}")
+	public String excluir(@PathVariable("id") Long id, RedirectAttributes attr) {
+		service.remover(id);
+		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso.");
 		return "redirect:/perfis/listar";
 	}
 }

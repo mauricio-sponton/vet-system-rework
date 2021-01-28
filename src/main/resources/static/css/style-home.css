@@ -11,7 +11,6 @@
 /* 
 CSS referente a pagina error e modal-confirm
 */
-
 body {
 	background: #f2f2f2
 }
@@ -24,27 +23,37 @@ body {
 	margin-top: 1%
 }
 
-.paciente-h2{
-	font-size:1.6em;
+.paciente-h2 {
+	font-size: 1.6em;
 	margin: 1% 0;
 }
 
-.table-pacient{
-	font-size:0.9em
+.table-pacient {
+	font-size: 0.9em
 }
 
-.table-pacient tbody{
-	color:black
+.table-pacient tbody {
+	color: black
 }
-.foto-neutra{
-	position: absolute; width: 65px; height: auto; top: -6px; right: 26px;
+
+.foto-neutra {
+	position: absolute;
+	width: 65px;
+	height: auto;
+	top: -6px;
+	right: 26px;
 }
+
 h1, h2 {
 	font-size: 2em;
 	margin: 1% 1% 0.5% 1%;
 	text-transform: Uppercase;
 	font-weight: 600;
 	color: #50B969;
+}
+
+.dt-buttons {
+	display: none
 }
 
 h1 strong {
@@ -69,13 +78,14 @@ h2 {
 	font-weight: 600;
 	color: #50B969;
 }
+
 .inf-h4 {
 	margin: 18% 0% 1.5% 2%;
 	font-size: 2em;
 	color: #50B969;
 	text-transform: Uppercase;
-	
 }
+
 h5.modal-title {
 	color: #04D284;
 	font-weight: 600;
@@ -255,7 +265,8 @@ ul.breadcrumb li+li:before {
 	transition: all 0.3s;
 	border-bottom: 4px solid #17b679;
 }
-.btn-cadastrar-aplicacao{
+
+.btn-cadastrar-aplicacao {
 	border: none;
 	font-family: inherit;
 	font-size: 1.1em;
@@ -277,20 +288,24 @@ ul.breadcrumb li+li:before {
 	transition: all 0.3s;
 	border-bottom: 4px solid #17b679;
 }
+
 .btn-cancelar {
 	background-color: #cc0000;
 	border-bottom: 4px solid #b30000;
 	margin-left: 0
 }
+
 .btn-cancelar:focus {
 	background-color: #cc0000;
 	border-bottom: 4px solid #b30000;
 }
+
 button.close {
 	background-color: #cc0000
 }
 
-.btn-primary:hover, .btn-cadastrar-usuario:hover, .btn-cadastrar-aplicacao:hover {
+.btn-primary:hover, .btn-cadastrar-usuario:hover,
+	.btn-cadastrar-aplicacao:hover {
 	background: #00cc88 !important;
 	text-decoration: none;
 	color: white;
@@ -322,17 +337,14 @@ button.close {
 .nav-link {
 	font-size: 1.22em;
 	margin-left: 1.8%;
-	
 }
 
 .nav-link.one {
 	margin-top: 2.5%;
-	
 }
 
 .nav-link i {
 	font-size: 0.85em;
-	
 }
 
 .nav-link:hover {
@@ -470,12 +482,23 @@ th:first-child {
 	border-top-left-radius: 5px;
 }
 
-table i {
+i {
 	color: white;
 	font-size: 1.2em
 }
 
-table .btn-success, table .btn-view, table .btn-danger, table .btn-down{
+.btn-success-new, .btn-view-new, .btn-danger-new {
+	padding: 6px;
+	color: #eee;
+	border: none;
+	margin-right: 8px;
+	text-align: center;
+	border-radius: 5px;
+	margin: auto;
+	width: 80px
+}
+
+.btn-success, .btn-view, .btn-danger, .btn-down {
 	padding: 6px;
 	color: #eee;
 	border: none;
@@ -486,77 +509,93 @@ table .btn-success, table .btn-view, table .btn-danger, table .btn-down{
 	display: block;
 	margin: auto;
 }
-.a-down{
+
+.a-down {
 	padding: 6px;
 	color: white;
 	border: none;
 	margin-right: 8px;
-	margin-top:1%;
+	margin-top: 1%;
 	text-align: center;
 	border-radius: 5px;
 	display: inline;
-	
-
 }
+
 .a-down i {
 	margin: auto;
 	padding: 10px;
 	color: white
 }
-table .btn-success, .btn-warning {
-	background-color: #ff9933; 
+
+.btn-success, .btn-warning, .btn-success-new {
+	background-color: #ff9933;
 	border-bottom: 2px solid #ff8000;
 }
-.btn-warning{
-	background-color: #ff9933; 
+
+.btn-warning {
+	background-color: #ff9933;
 	border-bottom: 4px solid #ff8000;
 }
+
 .btn-warning:hover {
 	background-color: #ff8533;
 	border-bottom: 4px solid #ff8000;
 	color: white
 }
+
 .btn-warning:focus {
 	background: #ff9900 !important;
 	border-bottom: 4px solid #e68a00 !important;
 	color: white !important
 }
-table .btn-success:hover {
+
+.btn-success:hover, .btn-success-new:hover {
 	background-color: #ff8533;
 	border-bottom: 2px solid #ff8000;
 }
 
-table .btn-success:focus {
+.btn-success:focus, .btn-success-new:focus {
 	background: #ff9900 !important;
 	border-bottom: 2px solid #e68a00 !important
 }
 
-table .btn-view {
+.btn-view, .btn-view-new {
 	background-color: #04D284;
 	border-bottom: 2px solid #50B969
 }
-table .btn-down, .a-down {
+
+.btn-down, .a-down {
 	background-color: #478fe6;
 	border-bottom: 2px solid #3786e6
 }
 
-table .btn-down:hover, table .btn-down:focus, .a-down:hover, .a-down:focus {
+.btn-down:hover, .btn-down:focus, .a-down:hover, .a-down:focus {
 	background-color: #126fe0;
 	border-bottom: 2px solid #3786e6;
 	cursor: pointer
 }
-table .btn-view:hover {
+
+.btn-view:hover, .btn-view-new:hover {
 	background-color: #00b36b;
 	border-bottom: 2px solid #50B969;
 	cursor: pointer
 }
 
-table btn.btn-info:focus, .btn-view:focus {
+btn.btn-info:focus, .btn-view:focus, .btn-view-new:focus {
 	background-color: #17b679 !important;
 	border-bottom: 2px solid #18A98B !important
 }
-table .btn-danger {
+
+.btn-danger, .btn-danger-new {
 	border-bottom: 2px solid #cc0000
+}
+
+.btn-danger-new {
+	background-color: #cc0000 !important;
+}
+
+.btn-danger-new:hover {
+	background-color: #e02424 !important
 }
 
 .page-item.active .page-link {
@@ -564,8 +603,8 @@ table .btn-danger {
 	border: 1px solid #17b679
 }
 
-#table-usuarios .btn-view, #table-usuarios .btn-danger, #table-usuarios .btn-success, .btn-down
-	{
+#table-usuarios .btn-view, #table-usuarios .btn-danger, #table-usuarios .btn-success,
+	.btn-down {
 	width: 140px;
 	text-align: center;
 }
@@ -587,23 +626,18 @@ table .btn-danger {
 	box-shadow: 2px 3px 7px #50B969;
 }
 
-.global-color.pacient{
-	width:100%;
-	margin-left:0;
-	margin-bottom:2%;
-	border-radius:0
+.global-color.pacient {
+	width: 100%;
+	margin-left: 0;
+	margin-bottom: 2%;
+	border-radius: 0
 }
 
 #img-infs {
 	width: 10%;
 	float: left;
 	margin: 2% 1%;
-
 }
-
-
-
-
 
 .alinha-dados strong {
 	color: #50B969 !important;
@@ -661,9 +695,7 @@ table .btn-danger {
 }
 
 .accordion {
-	background-color:    white
-
-;
+	background-color: white;
 	cursor: pointer;
 	padding: 18px;
 	width: 50%;
@@ -678,38 +710,39 @@ table .btn-danger {
 	font-size: 15px;
 }
 
-.accordion .active, .accordion:hover{
-	background-color: #2CC185 ;
-	color:#fff
+.accordion .active, .accordion:hover {
+	background-color: #2CC185;
+	color: #fff
 }
 
- .accordion:hover span{
- color:#fff}
-
-.accordion:focus span{
-	color:white
+.accordion:hover span {
+	color: #fff
 }
+
+.accordion:focus span {
+	color: white
+}
+
 .accordion:after {
 	content: '\002B';
 	color: black;
 	font-weight: bold;
 	float: right;
 	margin-left: 5px;
-	
 }
 
 .accordion.active:after {
 	content: "\2212";
-	color:white;
+	color: white;
 }
 
 .accordion span {
 	color: black;
 	font-size: 1.2em;
 }
- 
+
 button:focus {
-	background: #2CC185 ;
+	background: #2CC185;
 	outline: none !important;
 }
 
@@ -718,8 +751,8 @@ button:focus {
 	background-color: white;
 	max-height: 0;
 	overflow: hidden;
-	width:50%;
-	margin-left:1%;
+	width: 50%;
+	margin-left: 1%;
 	transition: max-height 0.2s ease-out;
 }
 
@@ -762,6 +795,7 @@ button:focus {
 	margin-right: 1%;
 	font-family: "Font Awesome 5 Free";
 }
+
 .dashboard-h::before {
 	content: "\f7f2";
 	font-weight: 600;
@@ -769,6 +803,7 @@ button:focus {
 	margin-right: 1%;
 	font-family: "Font Awesome 5 Free";
 }
+
 .pacientes-cadastrados::before {
 	content: "\f1b0";
 	font-weight: 600;
@@ -782,15 +817,16 @@ button:focus {
 	font-weight: 600;
 	display: inline-block;
 	margin-right: 1%;
-	margin-left:0;
+	margin-left: 0;
 	font-family: "Font Awesome 5 Free";
 }
+
 .agenda-h::before {
 	content: "\f017";
 	font-weight: 600;
 	display: inline-block;
 	margin-right: 1%;
-	margin-left:0;
+	margin-left: 0;
 	font-family: "Font Awesome 5 Free";
 }
 /*INPUT FILE*/
@@ -847,7 +883,6 @@ button:focus {
 	background-color: white;
 	padding: 0;
 	width: 100%;
-	
 }
 
 .inputfile-6:focus+label, .inputfile-6.has-focus+label, .inputfile-6+label:hover
@@ -878,9 +913,11 @@ button:focus {
 	display: inline-block;
 	float: right;
 }
-.inputfile-6+label strong i{
+
+.inputfile-6+label strong i {
 	color: white
 }
+
 .inputfile-6:focus+label strong, .inputfile-6.has-focus+label strong,
 	.inputfile-6+label:hover strong {
 	background-color: #208a15;
@@ -894,13 +931,15 @@ button:focus {
 	margin-left: 2%
 }
 
-.form-caracteristicas{
+.form-caracteristicas {
 	display: inline;
 	margin-left: 0
 }
-.form-caracteristicas label{
+
+.form-caracteristicas label {
 	margin-right: 2%
 }
+
 .btn-trabalho {
 	border: none;
 	font-family: inherit;
@@ -968,7 +1007,7 @@ button:focus {
 	border-radius: 10px;
 }
 
-.badge-danger {
+.badge-danger, .btn-danger-new {
 	background-color: #db5565;
 }
 
@@ -982,7 +1021,7 @@ button:focus {
 	display: inline-block;
 	padding: 0.6em 0.8em;
 	font-size: 1.5em;
-	margin-left:20px
+	margin-left: 20px
 }
 
 .notification::before {
@@ -1014,7 +1053,7 @@ button:focus {
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0
 		rgba(0, 0, 0, .24);
 	margin: 2% 1%;
-	background:white
+	background: white
 }
 
 .card__content {
@@ -1031,18 +1070,18 @@ button:focus {
 	background: #4DBA69;
 	font-size: .75rem;
 	font-weight: 700;
-	text-transform: uppercase;	
+	text-transform: uppercase;
 }
-.deletar-notificacao{
+
+.deletar-notificacao {
 	float: right;
-	padding: .25rem 1.25rem ;
+	padding: .25rem 1.25rem;
 	background: #db5565;
-	
 }
+
 .deletar-notificacao i {
 	color: white
 }
-
 
 /* HISTORICO TIMELINE*/
 /* The actual timeline (the vertical ruler) */
@@ -1050,32 +1089,35 @@ button:focus {
 	position: relative;
 	max-width: 1200px;
 	margin: 0 auto;
-	
 }
 
-.container-esquerdo{
-	width:20%;
-	color:gray !important; 
-	position:absolute;
-	text-align:center;
-	line-height:1.1em
+.container-esquerdo {
+	width: 20%;
+	color: gray !important;
+	position: absolute;
+	text-align: center;
+	line-height: 1.1em
 }
 
 .container-esquerdo span:first-child {
-	color:gray;
-	font-weight:bold;
-	font-size:1.2em;
+	color: gray;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 .container-esquerdo span:last-child {
-	color:orange;
-	font-weight:bold;
-	font-size:1.2em;
-	margin-left:50px;
-	
+	color: orange;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: 50px;
 }
-.left{left:20px;top:20px}
-.esquerdo{
+
+.left {
+	left: 20px;
+	top: 20px
+}
+
+.esquerdo {
 	margin-left: 20px;
 	margin-top: 20px
 }
@@ -1089,7 +1131,6 @@ button:focus {
 	bottom: 0;
 	left: 25%;
 	margin-left: -3px;
-	
 }
 
 /* Container around content */
@@ -1111,13 +1152,12 @@ button:focus {
 	position: absolute;
 	width: 40px;
 	height: 40px;
-	right: -17; 
-	background-color : white;
+	right: -17;
+	background-color: white;
 	border: 4px solid #FF9F55;
 	top: 15px;
 	border-radius: 50%;
 	z-index: 1;
-	
 }
 
 /* Add arrows to the right container (pointing left) */
@@ -1145,8 +1185,8 @@ button:focus {
 	background-color: #fff;
 	position: relative;
 	border-radius: 6px;
-	border-right:1px solid gray;
-	border-bottom:1px solid gray;
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
 	margin-top: 10px
 }
 
@@ -1157,49 +1197,43 @@ button:focus {
 	width: 100%;
 	padding: 3.5px;
 	height: 40px;
-	
 }
-
 
 .content span {
-	color:  #1a1a1a;
+	color: #1a1a1a;
 	font-weight: 500;
-	padding-left:10px;
-	line-height:1.2em
-
+	padding-left: 10px;
+	line-height: 1.2em
 }
 
-.titulo-historico div > span, .titulo-historico span{
-	color:white !important;
+.titulo-historico div>span, .titulo-historico span {
+	color: white !important;
 	font-size: 1.1em;
-	font-weight:600 !important
-	
+	font-weight: 600 !important
 }
 
-.btn-upload{
-	width:50px;
-	margin-right:0 auto;
-	float:right;
-	
-	margin-top:30px;
+.btn-upload {
+	width: 50px;
+	margin-right: 0 auto;
+	float: right;
+	margin-top: 30px;
 }
 
-.btn-upload i{
-	color:#fff
+.btn-upload i {
+	color: #fff
 }
 
-#data-busca{
-	width:350px;
-	border:1px solid gray !important
+#data-busca {
+	width: 350px;
+	border: 1px solid gray !important
 }
 
-.forms-historico select{
-	width:350px;
-	border:1px solid gray !important
+.forms-historico select {
+	width: 350px;
+	border: 1px solid gray !important
 }
 
-.btn-historico{
-	
+.btn-historico {
 	margin: 0 auto
 }
 /*SCROLLBAR*/
@@ -1237,35 +1271,51 @@ button:focus {
 	width: 50%;
 	margin-bottom: 4%;
 }
+
 .mensagem-home {
 	width: 78.8%;
 	margin-top: 2%;
 	margin-left: 1.8%;
 	background-color: #F59422;
 	padding: 20px;
-	
 }
-.perfis{
+
+.perfis {
 	width: 40%;
-	
 }
-.perfis div{
-	display:inline
+
+.perfis div {
+	display: inline
 }
+
 .mensagem-home strong {
 	color: white;
 	font-weight: bold;
 	text-transform: uppercase;
 }
-.alerta{
-	display:none; width:100%; background: #FF9933;
+
+.alerta {
+	display: none;
+	width: 100%;
+	background: #FF9933;
 	padding: 5px;
 	opacity: .8;
 	border-radius: 2px;
 	margin-bottom: 3px
-	
 }
-.alerta strong, .alerta p{
+
+.alerta strong, .alerta p {
 	color: white;
 	margin: 2px
+}
+
+@media only screen and (max-width: 770px) {
+	.dt-buttons {
+		display: inline
+	}
+	#table-perfis td:nth-child(2), #table-perfis td:nth-child(3),
+		#table-perfis td:nth-child(4), #table-perfis th:nth-child(2),
+		#table-perfis th:nth-child(3), #table-perfis th:nth-child(4) {
+		display: none
+	}
 }
