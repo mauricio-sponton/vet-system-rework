@@ -34,7 +34,7 @@ public class PerfilService {
 	public Map<String, Object> buscarTodos(HttpServletRequest request) {
 		datatables.setRequest(request);
 		datatables.setColunas(DatatablesColunas.PERFIS);
-		Page<Perfil> page = datatables.getSearch().isEmpty() ? repository.findAll(datatables.getPageable())
+		Page<Perfil> page = datatables.getSearch().isEmpty() ? repository.findAllPermissoes(datatables.getPageable())
 				: repository.findByName(datatables.getSearch(), datatables.getPageable());
 		return datatables.getResponse(page);
 	}

@@ -113,7 +113,16 @@
 									</div></td>
 							</tr>
 						</table>
-
+						<div class ="form-row">
+						<div class="mb-3">
+							<div class="custom-control custom-switch">
+								<input type="checkbox" class="custom-control-input"
+									th:field="*{ativo}" id="ativo"
+									th:if="${ativo == true ? 'checked=checked' : ''}" /> <label
+									class="custom-control-label" for="ativo">Perfil Ativo</label>
+							</div>
+						</div>
+						</div>
 
 						<input type="hidden" th:field="*{id}">
 						<div class="form-group row">

@@ -1309,13 +1309,22 @@ button:focus {
 	margin: 2px
 }
 
-@media only screen and (max-width: 770px) {
+.slider{
+	display: none;
+}
+#table-perfis tbody td.no-padding {
+    padding: 0;
+}
+#table-perfis tbody span{
+	color: black
+}
+@media only screen and (max-width: 774px) {
 	.dt-buttons {
 		display: inline
 	}
-	#table-perfis td:nth-child(2), #table-perfis td:nth-child(3),
-		#table-perfis td:nth-child(4), #table-perfis th:nth-child(2),
-		#table-perfis th:nth-child(3), #table-perfis th:nth-child(4) {
+	#table-perfis td:nth-child(5), #table-perfis td:nth-child(6),
+		#table-perfis td:nth-child(4), #table-perfis th:nth-child(5),
+		#table-perfis th:nth-child(6), #table-perfis th:nth-child(4) {
 		display: none
 	}
 }

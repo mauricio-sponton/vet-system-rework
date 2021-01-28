@@ -2,16 +2,12 @@ package com.vet.VetSystemRework.domain;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -47,6 +43,9 @@ public class Perfil extends AbstractEntity {
 	)
 	private List<Usuario> usuario;
 	
+	@Column(name = "ativo", nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean ativo;
+	
 	public Perfil() {
 		super();
 	}
@@ -77,6 +76,14 @@ public class Perfil extends AbstractEntity {
 
 	public void setPermissoes(List<Permissao> permissoes) {
 		this.permissoes = permissoes;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	
