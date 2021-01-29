@@ -66,7 +66,8 @@
 		$("#modal-perfil").on("hidden.bs.modal", function() {
 			$(".is-invalid").removeClass("is-invalid").removeAttr('style');
 			$("#msg-erro").hide();
-			$('.form-check-input').prop('checked', false)
+			$('.form-check-input').prop('checked', false);
+			$('.form-control').val("");
 			$("#modal-perfil").modal('hide');
 			
 			

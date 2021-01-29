@@ -61,7 +61,7 @@ $(document).ready(function() {
 	            {orderable: false, 
 	                data: 'id', 
 	                   "render": function(id) {
-	                       return '<a class="btn btn-success  btn-sm btn-block" href="/perfis/editar/'+ 
+	                       return '<a class="btn btn-success btn-sm btn-block" href="/perfis/editar/'+ 
 	                       	id +'" role="button"><i class="fas fa-edit"></i></a>';
 	                   }
 	               },
@@ -85,27 +85,30 @@ $(document).ready(function() {
 				{
 					text: 'Editar',
 					attr: {
-						data: 'id',
-						id: 'btn-editar',
+						
+						id: 'btn-editar-sm',
 						type: 'button',
 						class: "btn btn-success-new btn-sm ",
-						// href:'/clientes/editar/' + id
+						
 					},
 					enabled: false
 				},
 				{
 					text: 'Excluir',
 					attr: {
-						id: 'btn-excluir',
+						id: 'btn-excluir-sm',
 						type: 'button',
-						class: "btn btn-danger-new btn-sm"
+						class: "btn btn-danger-new btn-sm",
+						"data-toggle":"modal",
+						"data-target":"#confirm-modal"
 					},
+				
 					enabled: false
 				},
 				{
 					text: 'Visualizar',
 					attr: {
-						id: 'btn-visualizar',
+						id: 'btn-visualizar-sm',
 						type: 'button',
 						class: "btn btn-sm btn-view-new"
 					},
@@ -130,18 +133,16 @@ $(document).ready(function() {
 				table.buttons().enable();
 			}
 		});
+		$("#table-perfis tbody").on('click', 'a', function() {		
+			var tr = $('#table-perfis tbody').closest('tr');
+	        var row = table.row( tr );
+	        row.child( format(row.data()), 'no-padding' ).hide();
+		});
 		
-		$("#table-perfis tbody").on('click', 'tr', function(){
-		
-			
-		})
-		$('#btn-editar').on('click', function(){
-			var link = $(this).val();
-			document.location.href = link;
-		})
 		 $('#table-perfis tbody').on('click', 'tr', function () {
 				var link =table.row(table.$('tr.selected')).data().id;
-				$('#btn-editar').attr("href", '/perfis/editar/' + link);
+				$('#btn-editar-sm').attr("href", '/perfis/editar/' + link);
+				$('#btn-excluir-sm').attr("href", '/perfis/excluir/' + link);
 			 
 		        var tr = $(this).closest('tr');
 		        var row = table.row( tr );
@@ -152,7 +153,8 @@ $(document).ready(function() {
 		                 row.child.hide();
 		                 tr.removeClass('shown');
 		             } );
-		        	 $('#btn-editar').attr("href", '/perfis/editar/' + link);
+		        	 $('#btn-editar-sm').attr("href", '/perfis/editar/' + link);
+		        	 $('#btn-excluir-sm').attr("href", '/perfis/excluir/' + link);
 		        }
 		        else {
 		        	if ( table.row( '.shown' ).length ) {
@@ -162,10 +164,19 @@ $(document).ready(function() {
 		            row.child( format(row.data()), 'no-padding' ).show();
 		            tr.addClass('shown');
 		            $('div.slider', row.child()).slideDown();
-		            $('#btn-editar').attr("href", '/perfis/editar/' + link);
+		            $('#btn-editar-sm').attr("href", '/perfis/editar/' + link);
+		            $('#btn-excluir-sm').attr("href", '/perfis/excluir/' + link);
 		        }
 		    } );
-	    
+		 $('#btn-editar-sm').on('click', function(){
+				var link = $(this).attr('href');
+				document.location.href = link;
+		});
+		
+		 $('#btn-excluir-sm').on('click', function(){
+				url = $(this).attr('href');
+		})
+		
 	});
 	function format ( d ) {
 	    // `d` is the original data object for the row
@@ -188,3 +199,4 @@ $(document).ready(function() {
 		return '<div class="slider"><span>Descrição: </span>' + '<span>'+ d.desc +'</span><br><span>Ativo: </span>' 
 		+ '<span>'+ d.ativo + '</span>';
 	}
+

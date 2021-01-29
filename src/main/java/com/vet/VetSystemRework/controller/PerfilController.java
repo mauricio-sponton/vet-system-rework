@@ -1,5 +1,6 @@
 package com.vet.VetSystemRework.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vet.VetSystemRework.domain.Perfil;
 import com.vet.VetSystemRework.domain.Permissao;
+import com.vet.VetSystemRework.domain.PermissaoTipo;
 import com.vet.VetSystemRework.service.PerfilService;
 import com.vet.VetSystemRework.service.PermissaoService;
 
@@ -57,6 +59,13 @@ public class PerfilController {
 				service.salvar(perfil);
 				attr.addFlashAttribute("sucesso", "Perfil cadastrado com sucesso");
 			} else {
+				Perfil p2 = service.buscarPorId(perfil.getId());
+				if(p2.getPermissoes().contains(new Permissao(PermissaoTipo.ADMIN_WRITE.getCod()))) {
+					List<Permissao> list = new ArrayList<>();
+					list.add(new Permissao(PermissaoTipo.ADMIN_WRITE.getCod()));
+					list.addAll(perfil.getPermissoes());
+					perfil.setPermissoes(list);
+				}
 				service.salvar(perfil);
 				attr.addFlashAttribute("sucesso", "Dados alterados com sucesso");
 			}
