@@ -27,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
 		.antMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
 		.antMatchers("/").permitAll()
-		.antMatchers("/u/p/**").permitAll()
+		.antMatchers("/u/**").permitAll()
+		.antMatchers("/funcionarios/**").permitAll()
 		.antMatchers("/perfis/**").hasAuthority("ADMIN_WRITE")
 		.antMatchers("/clientes/**").hasAuthority("CLIENTE_WRITE")
 		.antMatchers("/clientes/listar").hasAnyAuthority("CLIENTE_WRITE, CLIENTE_READ")
@@ -45,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.and()
 			.exceptionHandling()
 			.accessDeniedPage("/acesso-negado")
+			
 		.and()
 			.rememberMe();
 	}

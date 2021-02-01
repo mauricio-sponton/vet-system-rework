@@ -17,5 +17,8 @@ public interface PerfilRepository extends JpaRepository<Perfil, Long>{
 	@Query("select p from Perfil p where not p.desc = 'ADMIN'")
 	Page<Perfil> findAllPermissoes(Pageable pageable);
 
+	@Query("select p from Perfil p where p.ativo = true")
+	List<Perfil> findAllPerfisAtivos();
+
 
 }

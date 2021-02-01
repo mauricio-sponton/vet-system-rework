@@ -53,15 +53,14 @@ $(document).ready(function() {
 					},
 					orderable : false
 				},
-				{	data : 'id',	
-					render : function(id) {
-						return ''.concat('<a class="btn btn-sm btn-block btn-view"', ' ') 
-								 .concat('id="dp_').concat(id).concat('"', ' ') 
-								 .concat('role="button" title="Visualizar" data-toggle="tooltip" data-placement="right">', ' ')
-								 .concat('<i class="fas fa-glasses"></i></a>');
-					},
-					orderable : false
-				},
+	
+				 {orderable: false,
+		             data: 'id',
+		                "render": function(id) {
+		                    return '<a class="btn btn-sm btn-block btn-view" href="/u/visualizar/dados/'+ 
+		                    	id +'" role="button"><i class="fas fa-glasses"></i></a>';
+		                }               
+		            },
 				 {orderable: false,
 		             data: 'id',
 		                "render": function(id) {
@@ -74,14 +73,14 @@ $(document).ready(function() {
 		]
 	});
 	
-	$('#table-usuarios tbody').on('click', '[id*="dp_"]', function(){
-		var data = table.row($(this).parents('tr')).data();
-		var aux = new Array();
-		$.each(data.perfis, function(index, value){
-			aux.push(value.id);
-		});
-		document.location.href = '/u/visualizar/dados/usuario/' + data.id + '/perfis/' + aux;
-	});
+//	$('#table-usuarios tbody').on('click', '[id*="dp_"]', function(){
+//		var data = table.row($(this).parents('tr')).data();
+//		var aux = new Array();
+//		$.each(data.perfis, function(index, value){
+//			aux.push(value.id);
+//		});
+//		document.location.href = '/u/visualizar/dados/usuario/' + data.id + '/perfis/' + aux;
+//	});
 });	
 
 $('.pass').keyup(function(){

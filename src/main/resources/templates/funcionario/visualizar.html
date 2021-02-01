@@ -1,0 +1,110 @@
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<style type="text/css">
+.teste span {
+	color: blue
+}
+</style>
+</head>
+
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+		<ul class="breadcrumb">
+			<li><a th:href="@{/home}">Dashboard </a></li>
+			<li class="active">Meu Perfil</li>
+
+		</ul>
+		<div th:replace="fragments/alert :: alerta-sucesso"></div>
+		<div class="align-h1">
+			<h1>meu perfil</h1>
+			<a  href="#" role="button" data-toggle="modal"
+				data-target="#modal-funcionario"> <img
+				th:src="@{/image/lapis.png}" style="width: 35px; height: auto;" />
+			</a>
+		</div>
+		<span th:replace="funcionario/modal :: modal-form"></span>
+		<div th:if="${funcionario.id != null}" class="global-color">
+			<div id="img-infs">
+				<img th:if="${funcionario.id != null && funcionario.foto.fileName == null && funcionario.sexo == 'Feminino'}"
+					th:src="@{/image/default_female.png}"
+					style="width: 120px; height: auto; float: left" />
+					<img th:if="${funcionario.id != null && funcionario.foto.fileName == null && funcionario.sexo == 'Masculino'}"
+					th:src="@{/image/default_male.png}"
+					style="width: 120px; height: auto; float: left" /> 
+					 <img
+					th:if="${funcionario.foto.fileName != null}"
+					th:src="@{${'/uploads/' + funcionario.foto.fileName}}"
+					style="width: 120px; height: auto; float: left" />
+			</div>
+			<section class="inf-content">
+				<div class="alinha-dados">
+					<strong>Nome: </strong>
+					<p th:text="${funcionario.nome}"></p>
+				</div>
+				<div class="alinha-dados">
+					<strong>Telefone: </strong>
+					<p th:text="${funcionario.telefone}"></p>
+				</div>
+				<div class="alinha-dados">
+					<strong>Email: </strong>
+					<p th:text="${funcionario.usuario.email}"></p>
+				</div>
+			</section>
+			<section class="inf-content">
+				<div class="alinha-dados">
+					<strong>Sexo: </strong>
+					<p th:text="${funcionario.sexo}"></p>
+				</div>
+				<div class="alinha-dados">
+					<strong>CPF: </strong>
+					<p th:text="${funcionario.cpf}"></p>
+				</div>
+				<div class="alinha-dados perfis">
+				<strong>Perfil: </strong><br>
+					<div th:each="p, iterStat : ${funcionario.usuario.perfis}">	
+						<span th:text="!${iterStat.last} ? ${p.desc} + ', ' : ${p.desc}"></span>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+
+	</section>
+
+	<script th:src="@{/js/secretaria.js(v=${version})}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+	var funcionario= [[${funcionario.id}]];
+	
+	$(document).ready(function() {
+		$(".btn-cadastrar-usuario").on('click',function(){
+			$("#modal-funcionario").modal('show');
+			$(".modal-title").text("Editar Dados");
+		})
+			
+		if ($("#msg-erro").html() != "") {
+			$("#modal-funcionario").modal('show');
+			$("#msg-erro").css("color", "red");
+			$(".is-invalid").css("border", "1px solid red");
+		}
+
+		$("#modal-funcionario").on("hidden.bs.modal", function() {
+			$(".is-invalid").removeClass("is-invalid").removeAttr('style');
+			$("#msg-erro").hide();
+			$("#modal-funcionario").modal('hide');
+			
+		});
+		if(funcionario == null){
+			$("#modal-funcionario").modal({
+				 backdrop: 'static',
+				 keyboard: false
+				 
+			});
+			$(".modal-title").text("Cadastramento de dados");
+		}
+	});
+	</script>
+</body>
+</html>

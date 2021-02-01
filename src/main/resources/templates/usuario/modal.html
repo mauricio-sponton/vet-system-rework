@@ -71,10 +71,10 @@
 								th:field="*{perfis}"
 								th:classappend="${#fields.hasErrors('perfis')} ? 'is-invalid'"
 								multiple>
-								<option value="1">Administrador</option>
-								<option value="2">Veterinário</option>
-								<option value="3">Secretária</option>
-							</select> <input type="hidden" value="0" name="perfis">
+								<th:block th:each="p, i: ${ativos}">
+									<option th:value="${p.id}" th:text="${p.desc}"></option>
+								</th:block>
+							</select> 
 
 							<div class="invalid-feedback">Pelo menos um perfil é
 								requerido.</div>

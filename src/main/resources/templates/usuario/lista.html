@@ -49,7 +49,6 @@
 	<script th:inline="javascript" th:fragment="inlinescript">
 	var usuario = [[${usuario.id}]];
 	$(document).ready(function() {
-		
 		if(usuario != null){
 			$("#modal-usuario").modal('show');
 			$(".modal-title").text("Editar Usuário");
@@ -77,13 +76,13 @@
 		});
 	})
 	
-	$('#perfis').ready(function(){
-		var perfis = [[${usuario.perfis}]];
+// 	$('#perfis').ready(function(){
+// 		var perfis = [[${usuario.perfis}]];
 		
-		$.each(perfis, function(k, v){
-			$('#perfis option[value="'+ v.id + '"]').attr('selected', 'selected');
-		})
-	});
+// 		$.each(perfis, function(k, v){
+// 			$('#perfis option[value="'+ v.id + '"]').attr('selected', 'selected');
+// 		})
+// 	});
 	$('.pass').on('keyup',function(){
 		if($('#senha').val() != $('#senha-repetida').val()){
 			$('#senhas').show().text('As senhas não são iguais!');

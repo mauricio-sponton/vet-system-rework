@@ -48,6 +48,7 @@ public class PerfilController {
 	public List<Permissao> getPermissoes(){
 		return permissaoService.buscarTodasPermissoes();
 	}
+	
 	@PostMapping("/salvar")
 	public String salvar(@Valid Perfil perfil, BindingResult result, RedirectAttributes attr, ModelMap model) {
 		if (result.hasErrors()) {

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vet.VetSystemRework.datatables.Datatables;
 import com.vet.VetSystemRework.datatables.DatatablesColunas;
 import com.vet.VetSystemRework.domain.Perfil;
+import com.vet.VetSystemRework.domain.Permissao;
 import com.vet.VetSystemRework.domain.Usuario;
 import com.vet.VetSystemRework.repository.UsuarioRepository;
 
@@ -49,8 +50,8 @@ public class UsuarioService implements UserDetailsService{
 		Usuario usuario = buscarPorEmailEAtivo(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuário " + username + "não encontrado."));
 		return usuario;
-	
 	}
+	
 
 //	@Override @Transactional(readOnly = true)
 //	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

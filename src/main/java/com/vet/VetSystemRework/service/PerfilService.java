@@ -1,5 +1,6 @@
 package com.vet.VetSystemRework.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,11 @@ public class PerfilService {
 	public void remover(Long id) {
 		repository.deleteById(id);
 
+	}
+
+	@Transactional(readOnly = true)
+	public List<Perfil> buscaTodosPerfisAtivos() {
+		return repository.findAllPerfisAtivos();
 	}
 
 }
