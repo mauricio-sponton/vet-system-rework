@@ -1,0 +1,73 @@
+package com.vet.VetSystemRework.service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.vet.VetSystemRework.datatables.Datatables;
+import com.vet.VetSystemRework.datatables.DatatablesColunas;
+import com.vet.VetSystemRework.domain.Especie;
+import com.vet.VetSystemRework.repository.EspecieRepository;
+
+
+
+@Service
+public class EspecieService {
+
+	@Autowired 
+	private EspecieRepository repository;
+	
+	@Autowired
+	private Datatables datatables;
+	
+	@Transactional(readOnly = false)
+	public void salvarEspecie(@Valid Especie especie) {
+		repository.save(especie);
+	}
+
+	public Map<String, Object> buscarTodos(HttpServletRequest request) {
+		datatables.setRequest(request);
+		datatables.setColunas(DatatablesColunas.ESPECIES);
+		Page<Especie> page =datatables.getSearch().isEmpty() ? repository.findAll(datatables.getPageable())
+				: repository.findByName(datatables.getSearch(), datatables.getPageable());
+		return datatables.getResponse(page);
+	}
+
+	@Transactional(readOnly = true)
+	public Especie buscarPorId(Long id) {
+		return repository.findById(id).get();
+	}
+
+	@Transactional(readOnly = false)
+	public void remover(Long id) {
+		repository.deleteById(id);
+	}
+
+	public List<Especie> buscarTodasEspecies() {
+		return repository.findAll();
+	}
+
+	@Transactional(readOnly = true)
+	public List<String> buscarEspecieByTermo(String termo) {
+		return repository.findEspecieByTermo(termo);
+	}
+	@Transactional(readOnly = true)
+	public Set<Especie> buscarPorTitulos(String[] titulos) {
+		return repository.findByTitulos(titulos);
+	}
+
+	@Transactional(readOnly = true)
+	public Especie buscarEspeciePorAnimal(String string) {
+	
+		return repository.findEspecieByAnimal(string);
+	}
+
+}

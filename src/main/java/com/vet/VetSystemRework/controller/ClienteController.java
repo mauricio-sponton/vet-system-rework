@@ -22,17 +22,13 @@ import com.vet.VetSystemRework.domain.Cliente;
 import com.vet.VetSystemRework.domain.UF;
 import com.vet.VetSystemRework.service.ClienteService;
 
-
-
-
-
 @Controller
 @RequestMapping("clientes")
 public class ClienteController {
 
 	@Autowired
 	private ClienteService service;
-	
+
 	@GetMapping("/listar")
 	public String listar(Cliente cliente, @AuthenticationPrincipal UserDetails user) {
 //		if(user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(PermissaoTipo.CLIENTE_WRITE.getDesc()))) {
@@ -43,26 +39,22 @@ public class ClienteController {
 //		}
 		return "cliente/lista";
 	}
-	
+
 	@GetMapping("/datatables/server")
 	public ResponseEntity<?> listarClientesDatatables(HttpServletRequest request) {
 		return ResponseEntity.ok(service.buscarTodos(request));
 	}
-	
+
 	@PostMapping("/salvar")
 	public String salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attr, ModelMap model) {
 		if (result.hasErrors()) {
 			model.addAttribute("erro", "por favor preencha os campos");
 			return "/cliente/lista";
 		}
+		String mensagem = cliente.hasNotId() ? "Dados cadastrados com sucesso!" : "Dados alterados com sucesso!";
 		try {
-			if (cliente.hasNotId()) {
-				service.salvar(cliente);
-				attr.addFlashAttribute("sucesso", "Cliente cadastrado com sucesso");
-			} else {
-				service.salvar(cliente);
-				attr.addFlashAttribute("sucesso", "Dados alterados com sucesso");
-			}
+			service.salvar(cliente);
+			attr.addFlashAttribute("sucesso", mensagem);
 		} catch (DataIntegrityViolationException ex) {
 			attr.addFlashAttribute("falha", "Cadastro não realizado pois o email ou cpf já existe");
 		}
@@ -74,6 +66,7 @@ public class ClienteController {
 	public UF[] getUFs() {
 		return UF.values();
 	}
+
 	@GetMapping("/editar/{id}")
 	public String preEditar(@PathVariable("id") Long id, ModelMap model) {
 		model.addAttribute("cliente", service.buscarPorId(id));
@@ -90,7 +83,7 @@ public class ClienteController {
 	@GetMapping("/visualizar/{id}")
 	public String visualizar(@PathVariable("id") Long id, ModelMap model) {
 		model.addAttribute("cliente", service.buscarPorId(id));
-		//model.addAttribute("animais", animalService.buscarAnimalPorDono(id));
+		// model.addAttribute("animais", animalService.buscarAnimalPorDono(id));
 		return "/cliente/visualizar";
 	}
 

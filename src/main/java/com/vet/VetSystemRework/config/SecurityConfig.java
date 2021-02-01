@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/funcionarios/**").permitAll()
 		.antMatchers("/perfis/**").hasAuthority("ADMIN_WRITE")
 		.antMatchers("/clientes/**").hasAuthority("CLIENTE_WRITE")
+		.antMatchers("/racas/**", "/especies/**").permitAll()
 		//.antMatchers("/clientes/listar").hasAnyAuthority("CLIENTE_WRITE, CLIENTE_READ")
 		
 		.anyRequest().authenticated()
