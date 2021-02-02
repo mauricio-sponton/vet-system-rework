@@ -34,6 +34,7 @@ public class FotoService {
 		Path absolutePath = currentPath.toAbsolutePath();
 		foto.setPath(absolutePath + "/src/main/resources/static/uploads/");
 		foto.setThumb(absolutePath + "/src/main/resources/static/uploads/thumb/");
+		foto.setFileName(file.getOriginalFilename());
 		byte[] bytes = file.getBytes();
 		Path path = Paths.get(foto.getPath() + file.getOriginalFilename());
 		Files.write(path, bytes);

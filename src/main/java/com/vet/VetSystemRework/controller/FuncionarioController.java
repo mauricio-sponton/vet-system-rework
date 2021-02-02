@@ -28,13 +28,13 @@ public class FuncionarioController {
 
 	@Autowired
 	private FotoService fotoService;
-	
+
 	@Autowired
 	private FuncionarioService service;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@PostMapping("/salvar")
 	public String salvarDadosPessoais(@Valid Funcionario funcionario, BindingResult result, RedirectAttributes attr,
 			ModelMap model, @RequestParam("file") MultipartFile file, @AuthenticationPrincipal UserDetails user) {
@@ -42,58 +42,45 @@ public class FuncionarioController {
 			model.addAttribute("erro", "Preencha os campos em vermelho!");
 			return "funcionario/visualizar";
 		}
-		if(funcionario.hasNotId()) {
+		if (funcionario.hasNotId()) {
 			Usuario usuario = usuarioService.buscarPorEmail(user.getUsername());
 			funcionario.setUsuario(usuario);
 		}
+		Foto foto = null;
 		if (!file.isEmpty()) {
-			if (funcionario.getFoto().hasNotId()) {
-				Foto foto = new Foto();
-				try {
-					fotoService.salvarFoto(file, foto);
-					funcionario.setFoto(foto);
-				} catch (Exception e) {
-					attr.addFlashAttribute("falha", "Erro ao cadastrar foto!");
-				}
-			}
-			if (funcionario.getFoto().hasId()) {
-				Foto foto = fotoService.buscarFotoId(funcionario.getFoto().getId());
-				foto.setFileName(file.getOriginalFilename());
-				foto.setPath("/uploads/");
-				
-				try {
-					fotoService.salvarFoto(file, foto);
-					funcionario.setFoto(foto);
-				} catch (Exception e) {
-					attr.addFlashAttribute("falha", "Erro ao cadastrar foto!");
-				}
+			foto = funcionario.getFoto().hasNotId() ? new Foto()
+					: fotoService.buscarFotoId(funcionario.getFoto().getId());
+			try {
+				funcionario.setFoto(foto);
+				fotoService.salvarFoto(file, foto);
+
+			} catch (Exception e) {
+				attr.addFlashAttribute("falha", "Erro ao cadastrar foto!");
 			}
 
 		}
 		if (file.isEmpty() && funcionario.hasId()) {
-			Foto foto = null;
-			if(funcionario.getFoto().hasId()) {
-				foto = fotoService.buscarFotoId(funcionario.getFoto().getId());
-				funcionario.setFoto(foto);
-				try {
-					fotoService.salvar(foto);
-				} catch (Exception e) {
-					attr.addFlashAttribute("falha", "Erro ao cadastrar foto!");
-				}
-			}else {
+			foto = funcionario.getFoto().hasId() ? fotoService.buscarFotoId(funcionario.getFoto().getId()) : null;
+
+			if (foto == null) {
 				funcionario.setFoto(null);
-				
+			} else {
+				funcionario.setFoto(foto);
+				fotoService.salvar(foto);
 			}
+
 		}
-			service.salvar(funcionario);
-			attr.addFlashAttribute("sucesso", "Operação realizada com sucesso");
-			return "redirect:/funcionarios/dados";
+
+		service.salvar(funcionario);
+		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso");
+		return "redirect:/funcionarios/dados";
 	}
+
 	@GetMapping("/dados")
 	public String abrirPorUsuario(Funcionario funcionario, ModelMap model, @AuthenticationPrincipal UserDetails user) {
 		funcionario = service.buscarPorEmail(user.getUsername());
 		model.addAttribute("funcionario", funcionario);
 		return "funcionario/visualizar";
-		
+
 	}
 }
