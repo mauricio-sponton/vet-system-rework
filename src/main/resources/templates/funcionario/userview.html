@@ -1,0 +1,165 @@
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8" />
+<style type="text/css">
+#mensagem {
+	width: 95%;
+	margin-top: 2%;
+	margin-left: 2%;
+	background-color: #50B969;
+	padding: 20px;
+	float: left
+}
+
+#mensagem span {
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+</style>
+</head>
+
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+		<ul class="breadcrumb">
+			<li><a th:href="@{/home}">Dashboard </a></li>
+			<li><a th:href="@{/u/listar}">Usuários</a></li>
+			<li class="active">Perfil: <span style="color: black"
+				th:text="${funcionario.nome}"></span></li>
+
+		</ul>
+		<div th:replace="fragments/alert :: alerta-sucesso"></div>
+		<h1>página de perfil</h1>
+		<div class="global-color">
+			<div id="img-infs">
+				<img th:if="${funcionario.foto.fileName == null && funcionario.sexo == 'Masculino'}"
+					th:src="@{/image/default_male.png}"
+					style="width: 120px; height: auto; float: left" /> 
+					<img th:if="${funcionario.foto.fileName == null && funcionario.sexo == 'Feminino'}"
+					th:src="@{/image/default_female.png}"
+					style="width: 120px; height: auto; float: left" />
+					<img
+					th:if="${funcionario.foto.fileName != null}"
+					th:src="@{${'/uploads/' + funcionario.foto.fileName}}"
+					style="width: 120px; height: auto; float: left" />
+			</div>
+			<section class="inf-content">
+				<div class="alinha-dados">
+					<strong>Nome: </strong>
+					<p th:text="${funcionario.nome}"></p>
+				</div>
+<!-- 				<div class="alinha-dados"> -->
+<!-- 					<strong>CRMV: </strong> -->
+<!-- 					<p th:text="${funcionario.crmv}"></p> -->
+<!-- 				</div> -->
+				<div class="alinha-dados">
+					<strong>Telefone: </strong>
+					<p th:text="${funcionario.telefone}"></p>
+				</div>
+
+				<div class="alinha-dados">
+					<strong>Email: </strong>
+					<p th:text="${funcionario.usuario.email}"></p>
+				</div>
+			</section>
+			<section class="inf-content">
+				<div class="alinha-dados">
+					<strong>Sexo: </strong>
+					<p th:text="${funcionario.sexo}"></p>
+				</div>
+				<div class="alinha-dados">
+					<strong>CPF: </strong>
+					<p th:text="${funcionario.cpf}"></p>
+				</div>
+				<div class="alinha-dados perfis">
+				<strong>Perfil: </strong><br>
+					<div th:each="p, iterStat : ${funcionario.usuario.perfis}">	
+						<span th:text="!${iterStat.last} ? ${p.desc} + ', ' : ${p.desc}"></span>
+					</div>
+				</div>
+			</section>
+
+		</div>
+		<div id="mensagem" th:if="${#lists.isEmpty(horarios)}">
+			<span>Esse usuário não possui cadastro de dias trabalhados! </span>
+		</div>
+		<h2 class="h2-textarea mb-3" th:if="${not #lists.isEmpty(horarios)}">dias
+			de trabalho</h2>
+		<form class="form-vet">
+			<table th:if="${not #lists.isEmpty(horarios)}"
+				class="table table-horarios table-striped table-sm ">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Dia</th>
+						<th scope="col">Entrada</th>
+						<th scope="col">Saída</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="c: ${horarios}">
+
+						<td scope="row" th:switch="${c.diaDaSemana}">
+							<div class="dias" th:case="1">
+								<span>Domingo</span>
+							</div>
+							<div class="dias" th:case="2">
+								<span>Segunda</span>
+							</div>
+							<div class="dias" th:case="3">
+								<span>Terça</span>
+							</div>
+							<div class="dias" th:case="4">
+								<span>Quarta</span>
+							</div>
+							<div class="dias" th:case="5">
+								<span>Quinta</span>
+							</div>
+							<div class="dias" th:case="6">
+								<span>Sexta</span>
+							</div>
+							<div class="dias" th:case="7">
+								<span>Sábado</span>
+							</div>
+
+						</td>
+
+						<td>
+							<div th:if="${c.inicio == null}">
+								<span>Folga</span>
+							</div>
+							<div th:if="${c.inicio !=''}">
+								<span th:text="${c.inicio}"></span>
+							</div>
+
+						</td>
+						<td>
+							<div th:if="${c.fim == null}">
+								<span>Folga</span>
+							</div>
+							<div th:if="${c.fim !=''}">
+								<span th:text="${c.fim}"></span>
+							</div>
+
+						</td>
+
+
+					</tr>
+				</tbody>
+			</table>
+		</form>
+		<div class="user-btn">
+
+			<!-- <button><i class="fas fa-edit"></i> Editar</button>-->
+			<a type="button" th:href="@{/u/listar}"><i
+				class="fas fa-arrow-left"></i>Voltar</a>
+
+		</div>
+	</section>
+
+	<script th:src="@{/js/funcionario.js(v=${version})}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+		
+	</script>
+</body>
+</html>

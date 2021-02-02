@@ -1,14 +1,19 @@
 package com.vet.VetSystemRework.domain;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -42,6 +47,18 @@ public class Funcionario extends AbstractEntity{
 	@JoinColumn(name = "usuario_fk")
 	private Usuario usuario;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "funcionario", cascade = CascadeType.REMOVE)
+	private List<CargaHoraria> horarios;
+	
+	public List<CargaHoraria> getHorarios() {
+		return horarios;
+	}
+
+	public void setHorarios(List<CargaHoraria> horarios) {
+		this.horarios = horarios;
+	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}

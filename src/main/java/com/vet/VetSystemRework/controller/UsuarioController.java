@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.vet.VetSystemRework.domain.CargaHoraria;
 import com.vet.VetSystemRework.domain.Funcionario;
 import com.vet.VetSystemRework.domain.Perfil;
 import com.vet.VetSystemRework.domain.Usuario;
+import com.vet.VetSystemRework.service.CargaHorariaService;
 import com.vet.VetSystemRework.service.FuncionarioService;
 import com.vet.VetSystemRework.service.PerfilService;
 import com.vet.VetSystemRework.service.UsuarioService;
@@ -42,6 +44,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private FuncionarioService funcionarioService;
+	
+	@Autowired
+	private CargaHorariaService cargaHorariaService;
 	
 	@GetMapping("/ajuda")
 	public String abrirPaginaAjuda(Usuario usuario) {
@@ -132,8 +137,10 @@ public class UsuarioController {
 			return "error";			
 		}
 		if(funcionario.hasId()) {
+			List<CargaHoraria> horarios = cargaHorariaService.buscarHorarioPorFuncionario(funcionario.getId());
+			modelmap.addAttribute("horarios", horarios);
 			modelmap.addAttribute("funcionario", funcionario);
-			return "funcionario/visualizar";
+			return "funcionario/userview";
 		}
 		
 		return "redirect:/u/lista";
@@ -147,9 +154,7 @@ public class UsuarioController {
 		}
 			Funcionario funcionario = funcionarioService.buscarPorIdUsuario(id);
 			if(funcionario.hasId()) {
-				
 				funcionarioService.remover(funcionario.getId());
-				//service.remover(id);
 			}else {
 				service.remover(id);
 			}

@@ -70,32 +70,141 @@
 			</section>
 
 		</div>
+		<h2 class="h2-textarea">dias de trabalho</h2>
+		<form class="form-vet" th:if="${form != null}"
+			th:action="@{/funcionarios/salvar/horarios}" th:object="${form}"
+			method="post">
+			<table class="table table-sm nowrap horarios">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Dia</th>
+						<th scope="col">Entrada</th>
+						<th scope="col">Saída</th>
+						<th scope="col">Folga</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="cargaHoraria, itemStat : *{cargas}">
 
+						<td scope="row" th:switch="${itemStat.index}">
+							<div class="dias" th:case="0">
+								<span>Domingo</span>
+							</div>
+							<div class="dias" th:case="1">
+								<span>Segunda</span>
+							</div>
+							<div class="dias" th:case="2">
+								<span>Terça</span>
+							</div>
+							<div class="dias" th:case="3">
+								<span>Quarta</span>
+							</div>
+							<div class="dias" th:case="4">
+								<span>Quinta</span>
+							</div>
+							<div class="dias" th:case="5">
+								<span>Sexta</span>
+							</div>
+							<div class="dias" th:case="6">
+								<span>Sábado</span>
+							</div>
+
+						</td>
+
+						<td><input class="form-control" type="time"
+							th:field="*{cargas[__${itemStat.index}__].inicio}" /></td>
+						<td><input class="form-control" type="time"
+							th:field="*{cargas[__${itemStat.index}__].fim}" /></td>
+						<td style="display: none"><input type="hidden"
+							th:field="*{cargas[__${itemStat.index}__].funcionario.id}" /></td>
+						<td><input type="checkbox" id="ativo" class="teste"
+							th:field="*{cargas[__${itemStat.index}__].ativo}"
+							th:if="${ativo == true ? 'checked=checked' : ''} " /></td>
+
+					</tr>
+				</tbody>
+			</table>
+			<button type="submit" class="btn btn-primary btn-sm btn-trabalho">Salvar</button>
+
+		</form>
+		<form class="form-vet" th:if="${formEdit != null}"
+			th:action="@{/funcionarios/salvar/horarios}" th:object="${formEdit}"
+			method="post">
+			<table class="table table-sm nowrap horarios" style="width: 100%">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Dia</th>
+						<th scope="col">Entrada</th>
+						<th scope="col">Saída</th>
+						<th scope="col">Folga</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="cargaHoraria, itemStat : *{cargas}">
+
+						<td scope="row" th:switch="${itemStat.index}">
+							<div class="dias" th:case="0">
+								<span>Domingo</span>
+							</div>
+							<div class="dias" th:case="1">
+								<span>Segunda</span>
+							</div>
+							<div class="dias" th:case="2">
+								<span>Terça</span>
+							</div>
+							<div class="dias" th:case="3">
+								<span>Quarta</span>
+							</div>
+							<div class="dias" th:case="4">
+								<span>Quinta</span>
+							</div>
+							<div class="dias" th:case="5">
+								<span>Sexta</span>
+							</div>
+							<div class="dias" th:case="6">
+								<span>Sábado</span>
+							</div>
+
+						</td>
+
+						<td><input type="time" class="inicio form-control"
+							th:name="|cargas[${itemStat.index}].inicio|"
+							th:value="${cargaHoraria.getInicio()}"
+							th:classappend="${#fields.hasErrors('cargas[__${itemStat.index}__].inicio')} ? 'is-invalid'" />
+							<div class="invalid-feedback">
+								<span th:errors="*{cargas[__${itemStat.index}__].inicio}"></span>
+							</div></td>
+						<td><input type="time" class="fim  form-control"
+							th:name="|cargas[${itemStat.index}].fim|"
+							th:value="${cargaHoraria.getFim()}"
+							th:classappend="${#fields.hasErrors('cargas[__${itemStat.index}__].fim')} ? 'is-invalid'" />
+							<div class="invalid-feedback">
+								<span th:errors="*{cargas[__${itemStat.index}__].fim}"></span>
+							</div></td>
+						<td style="display: none"><input type="hidden"
+							th:name="|cargas[${itemStat.index}].funcionario.id|"
+							th:value="${cargaHoraria.getFuncionario().getId()}" /></td>
+						<td style="display: none"><input type="hidden"
+							th:name="|cargas[${itemStat.index}].id|"
+							th:value="${cargaHoraria.getId()}" /></td>
+						<td><input type="checkbox"
+							th:field="*{cargas[__${itemStat.index}__].ativo}" class="teste"
+							id="ativo"
+							th:if="${cargaHoraria.isAtivo() == true ? 'checked=checked' : ''} " /></td>
+					</tr>
+				</tbody>
+			</table>
+			<button type="submit" class="btn-trabalho">Salvar</button>
+		</form>
 
 	</section>
 
-	<script th:src="@{/js/secretaria.js(v=${version})}" th:fragment="js"></script>
+	<script th:src="@{/js/funcionario.js(v=${version})}" th:fragment="js"></script>
 	<script th:inline="javascript" th:fragment="inlinescript">
 	var funcionario= [[${funcionario.id}]];
 	
 	$(document).ready(function() {
-		$(".btn-cadastrar-usuario").on('click',function(){
-			$("#modal-funcionario").modal('show');
-			$(".modal-title").text("Editar Dados");
-		})
-			
-		if ($("#msg-erro").html() != "") {
-			$("#modal-funcionario").modal('show');
-			$("#msg-erro").css("color", "red");
-			$(".is-invalid").css("border", "1px solid red");
-		}
-
-		$("#modal-funcionario").on("hidden.bs.modal", function() {
-			$(".is-invalid").removeClass("is-invalid").removeAttr('style');
-			$("#msg-erro").hide();
-			$("#modal-funcionario").modal('hide');
-			
-		});
 		if(funcionario == null){
 			$("#modal-funcionario").modal({
 				 backdrop: 'static',
@@ -104,6 +213,7 @@
 			});
 			$(".modal-title").text("Cadastramento de dados");
 		}
+		
 	});
 	</script>
 </body>

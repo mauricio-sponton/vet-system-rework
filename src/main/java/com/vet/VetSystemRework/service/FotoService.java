@@ -66,23 +66,4 @@ public class FotoService {
 
 	}
 
-	@Transactional(readOnly = false)
-	public void salvarFotos(MultipartFile[] files, Foto foto) throws IOException {
-		for (int i = 0; i < files.length; i++) {
-			Path currentPath = Paths.get(".");
-			Path absolutePath = currentPath.toAbsolutePath();
-			foto.setPath(absolutePath + "/src/main/resources/static/uploads/");
-			byte[] bytes = files[i].getBytes();
-			Path path = Paths.get(foto.getPath() + files[i].getOriginalFilename());
-			Files.write(path, bytes);
-			fotoRepository.save(foto);
-		}
-
-	}
-/*
-	@Transactional(readOnly = true)
-	public List<Foto> buscarFotosPorId(Long id) {
-		return fotoRepository.findByFotosId(id);
-	}
-	*/
 }
