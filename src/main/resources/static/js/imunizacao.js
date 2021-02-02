@@ -22,7 +22,7 @@ $(document).ready(function () {
         serverSide: true,
         responsive: true,
         ajax: {
-            url: '/vacinas/datatables/server',
+            url: '/imunizacoes/datatables/server',
             data: 'data'
         },
         "columnDefs":[
@@ -36,14 +36,14 @@ $(document).ready(function () {
             {orderable: false, 
              data: 'id',
                 "render": function(id) {
-                    return '<a class="btn btn-success btn-sm btn-block" href="/vacinas/editar/'+ 
+                    return '<a class="btn btn-success btn-sm btn-block" href="/imunizacoes/editar/'+ 
                     	id +'" role="button"><i class="fas fa-edit"></i></a>';
                 }
             },
             {orderable: false,
              data: 'id',
                 "render": function(id) {
-                    return '<a class="btn btn-danger btn-sm btn-block" href="/vacinas/excluir/'+ 
+                    return '<a class="btn btn-danger btn-sm btn-block" href="/imunizacoes/excluir/'+ 
                     	id +'" role="button" data-toggle="modal" data-target="#confirm-modal"><i class="fas fa-trash-alt"></i></a>';
                 }               
             }
@@ -86,4 +86,25 @@ $(document).ready(function () {
             
         ]
     });
+    if ($("#msg-erro").html() != "") {
+		
+		$("#modal-vacina").modal('show');
+		$(".invalid-feedback span").css('color', 'red');		
+	}
+
+	$("#modal-vacina").on("hidden.bs.modal", function() {
+		$(".is-invalid").removeClass("is-invalid").removeAttr('style');
+		$("#msg-erro").hide();
+		$("#modal-vacina").modal('hide');
+		
+	});
+	
+	$(".btn-cadastrar-usuario").on("click", function(){
+		$(".form-control").val("");
+		$(".modal-title").text("Nova Vacina");
+	});	
+	$('#confirm-modal').on('show.bs.modal', function(){
+		$(".modal-title").text("Excluir Imunização");
+		$('#subtitulo').text('Todas aplicações que possuem essa imunização serão deletadas!');
+	})
 });    
