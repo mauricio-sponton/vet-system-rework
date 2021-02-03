@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<title>Vet System - Pacientes Cadastrados</title>
+<style type="text/css">
+
+#table-animais_filter input {
+margin-right: 50px;
+width: 72%
+}
+</style>
+</head>
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+		<main role="main">
+			<ul class="breadcrumb">
+				<li><a th:href="@{/home}">Dashboard </a></li>
+				<li class="active">Pacientes</li>
+
+			</ul>
+
+			<div class="container">
+
+				<div class="row">
+					<div class="col-md-11">
+
+						<div th:replace="fragments/alert :: alerta-sucesso" ></div>
+						<h2 class="pacientes-cadastrados">Pacientes Cadastrados</h2>
+
+						<table id="table-animais"
+							class="table table-sm table-striped nowrap" style="width: 100%">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">Nome</th>
+									<th scope="col">Dono</th>
+									<th scope="col">Espécie</th>
+									<th scope="col">Raça</th>
+									<th scope="col">Editar</th>
+									<th scope="col">Excluir</th>
+									<th scope="col">Visualizar</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+			<a class="btn-cadastrar-usuario" href="#" role="button"
+				data-toggle="modal" data-target="#modal-animal">Novo Paciente</a> <span
+				th:replace="animal/modal :: modal-form"></span>
+
+		</main>
+
+	</section>
+	<script th:src="@{/js/animal.js(v=${version})}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+	var animal = [[${animal.id}]];
+	$(document).ready(function() {
+				document.getElementById('datePickerId').max = new Date(
+						new Date().getTime()
+								- new Date().getTimezoneOffset() * 60000)
+						.toISOString().split("T")[0];
+			});
+	$(document).ready(function(){
+		if(animal != null){
+			$("#modal-animal").modal('show');
+			$(".modal-title").text("Editar Paciente");
+		}
+		if(animal == null){
+			$(".modal-title").text("Novo Paciente");
+		}
+		if ($("#msg-erro").html() != "") {
+			
+			$("#modal-animal").modal('show');
+			$("#msg-erro").css("color", "red");
+			$(".invalid-feedback span").css("color", "red");
+		}
+
+		$("#modal-animal").on("hidden.bs.modal", function() {
+			$(".is-invalid").removeClass("is-invalid").removeAttr('style');
+			$("#msg-erro").hide();
+			$("#modal-animal").modal('hide');
+			
+		});
+		
+		$(".btn-cadastrar-usuario").on("click", function(){
+			$(".form-control").val("");
+			$(".modal-title").text("Novo Paciente");
+		});	
+	});	
+	
+		$("#especie").autocomplete({
+			
+			source : function(request, response) {
+				$.ajax({
+					method : "GET",
+					url : "/especies/titulo",
+					data : {
+						termo : request.term
+					},
+					success : function(data) {
+						response(data);
+					}
+				})
+			}
+		})
+
+	function mudar() {
+		especie = $("#especie").val();
+		$("#raca").autocomplete({
+			source : function(request, response) {
+				$.ajax({
+					method : "GET",
+					url : "/racas/titulo",
+					data : {
+						especie : especie,
+						termo : request.term
+					},
+					success : function(data) {
+						response(data);
+					}
+				})
+			}
+		})
+	}
+		$('#confirm-modal').on('show.bs.modal', function(){
+			$(".modal-title").text("Excluir Paciente");
+			$('#subtitulo').text('Todas as informaçãoes referentes a este paciente serão deletadas do sistema!');
+		});
+		
+	</script>
+</body>
+</html>
