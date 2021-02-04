@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -51,6 +53,23 @@ public class Funcionario extends AbstractEntity{
 	@OneToMany(mappedBy = "funcionario", cascade = CascadeType.REMOVE)
 	private List<CargaHoraria> horarios;
 	
+	@JsonIgnore
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(
+			name = "funcionarios_tem_agendamentos",
+			joinColumns = @JoinColumn(name = "id_funcionario", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "id_agendamento", referencedColumnName = "id")
+    )
+	private List<Agendamento> agendamentos;
+	
+	public List<Agendamento> getAgendamentos() {
+		return agendamentos;
+	}
+
+	public void setAgendamentos(List<Agendamento> agendamentos) {
+		this.agendamentos = agendamentos;
+	}
+
 	public List<CargaHoraria> getHorarios() {
 		return horarios;
 	}

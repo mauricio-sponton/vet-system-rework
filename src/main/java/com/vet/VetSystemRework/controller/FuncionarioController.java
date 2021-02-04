@@ -1,5 +1,7 @@
 package com.vet.VetSystemRework.controller;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -7,6 +9,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -167,5 +172,15 @@ public class FuncionarioController {
 		cargaHorariaService.salvarTodos(form.getCargas());
 		attr.addFlashAttribute("sucesso", "Dados cadastrados com sucesso");
 		return "redirect:/funcionarios/dados";
+	}
+	@GetMapping("/disponiveis")
+	public ResponseEntity<?> getFuncionariosDisponiveis(
+			@RequestParam("inicio") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime inicio,
+			@RequestParam("fim") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime fim,
+			@RequestParam("diaInicial") int diaInicial, @RequestParam("diaFinal") int diaFinal) {
+		LocalTime start = inicio.toLocalTime();
+		LocalTime end = fim.toLocalTime();
+		List<Funcionario> funcionarios = service.buscarFuncionariosDisponiveis(start, end, diaInicial, diaFinal, inicio, fim);
+		return ResponseEntity.ok(funcionarios);
 	}
 }

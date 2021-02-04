@@ -67,6 +67,7 @@ public class AnimalController {
 	@Autowired
 	private ClienteService clienteService;
 
+	//Cadastrar o paciente
 	@PostMapping("/salvar")
 	public String salvarAnimal(@Valid Animal animal, BindingResult result, RedirectAttributes attr,
 			@AuthenticationPrincipal UserDetails user, @RequestParam("file") MultipartFile file, ModelMap model) {
@@ -75,6 +76,7 @@ public class AnimalController {
 			return "animal/lista";
 		}
 
+		//Pesquisas referente ao autocomplete
 		String tituloEspecie = animal.getEspecie().getNome();
 		String tituloRaca = animal.getRaca().getNome();
 		Especie especie = especieService.buscarPorTitulos(new String[] { tituloEspecie }).stream().findFirst().get();
@@ -84,7 +86,8 @@ public class AnimalController {
 			attr.addFlashAttribute("falha", "Espécie e raça não condizem!");
 			return "redirect:/pacientes/listar";
 		}
-
+		//-----------------------------------------------------------------------------------
+		//file upload
 		Foto foto = null;
 		if (!file.isEmpty()) {
 			foto = animal.getFoto().hasNotId() ? new Foto() : fotoService.buscarFotoId(animal.getFoto().getId());
@@ -108,7 +111,9 @@ public class AnimalController {
 			}
 
 		}
-
+		//-------------------------------------------------
+		
+		
 		HistoricoAnimal historico = new HistoricoAnimal();
 		LocalDate data = LocalDate.now();
 		LocalTime hora = LocalTime.now();
@@ -122,6 +127,7 @@ public class AnimalController {
 				perfil = funcionario.getUsuario().getPerfis().get(1).getDesc();
 			}
 
+			//CADASTRO NO HISTÓRICO DO PACIENTE CASO ELE NÃO TENHA ID
 			if (animal.hasNotId()) {
 				mensagem = "Dados cadastrados com sucesso!";
 				historico.setDescricao("O paciente foi cadastrado com sucesso!");
@@ -130,6 +136,7 @@ public class AnimalController {
 				animal.setStatus("Normal");
 
 			}
+			//CADASTRO NO HISTÓRICO DO PACIENTE CASO ELE TENHA ID
 			if (animal.hasId()) {
 				mensagem = "Dados alterados com sucesso!";
 				Animal status = service.buscarPorId(animal.getId());
@@ -208,29 +215,39 @@ public class AnimalController {
 		return "redirect:/pacientes/listar";
 
 	}
+	//ABRIR PÁGINA QUE LISTA OS PACIENTES
 	@GetMapping("/listar")
 	public String listarAnimais(Animal animal) {
 		return "animal/lista";
 	}
 
+	//FUNÇÃO PARA CARREGAR A LISTA DE PACIENTES
 	@GetMapping("/datatables/server")
 	public ResponseEntity<?> listarAnimaisDatatables(HttpServletRequest request) {
 		return ResponseEntity.ok(service.buscarTodos(request));
 	}
+	//FUNÇÃO PARA ATRIBUIR OS CLIENTES NO SELECT DO FORM
 	@ModelAttribute("clientes")
 	public List<Cliente> listaDeClientes() {
 		return clienteService.buscarTodosClientes();
 	}
+	//EDITAR PACIENTES
 	@GetMapping("/editar/{id}")
 	public String preEditar(@PathVariable("id") Long id, ModelMap model) {
 		model.addAttribute("animal", service.buscarPorId(id));
 		return "animal/lista";
 	}
 
+	//EXCLUIR PACIENTES
 	@GetMapping("/excluir/{id}")
 	public String excluir(@PathVariable("id") Long id, RedirectAttributes attr) {
 		service.remover(id);
 		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso.");
 		return "redirect:/pacientes/listar";
+	}
+	@GetMapping("/titulo")
+	public ResponseEntity<?> getAnimaisPorTermo(@RequestParam("termo") String termo) {
+		List<Animal> animais = service.buscarAnimaisByTermo(termo);
+		return ResponseEntity.ok(animais);
 	}
 }

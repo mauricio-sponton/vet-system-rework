@@ -1,5 +1,9 @@
 package com.vet.VetSystemRework.service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,17 @@ public class FuncionarioService {
 	public void remover(Long id) {
 		repository.deleteById(id);
 		
+	}
+
+	@Transactional(readOnly = true)
+	public Funcionario buscarPorId(Long id) {
+		return repository.findById(id).get();
+	}
+
+	@Transactional(readOnly = true)
+	public List<Funcionario> buscarFuncionariosDisponiveis(LocalTime start, LocalTime end, int diaInicial, int diaFinal,
+			LocalDateTime inicio, LocalDateTime fim) {
+		return repository.findFuncionariosByHorariosDisponiveis(start, end, diaInicial, diaFinal, inicio, fim);
 	}
 
 }

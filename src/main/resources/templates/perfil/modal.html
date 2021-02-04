@@ -112,6 +112,39 @@
 
 									</div></td>
 							</tr>
+							<tr>
+								<td><div class="form-row">
+										<div class="form-group col-md-12">
+											<fieldset>
+												<legend>Agenda</legend>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="checkbox" value="6"
+														th:field="*{permissoes}" name="row-especies"> <label
+														class="form-check-label" for="flexCheckDefault">
+														Acesso Total <b style="color: indigo"
+														th:text="${permissoes[4].nome}"></b>
+													</label>
+												</div>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="checkbox" value="7"
+														th:field="*{permissoes}" name="row-especies"> <label
+														class="form-check-label" for="flexCheckDefault">
+														Visualizar <b style="color: indigo"
+														th:text="${permissoes[5].nome}"></b>
+													</label>
+												</div>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="checkbox" value="0"
+														name="row-cliente" > <label
+														class="form-check-label" for="flexCheckDefault">
+														Sem Acesso </label>
+
+												</div>
+											</fieldset>
+										</div>
+
+									</div></td>
+							</tr>
 						</table>
 						<div class ="form-row">
 						<div class="mb-3">

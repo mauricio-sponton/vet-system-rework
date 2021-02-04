@@ -1,6 +1,8 @@
 package com.vet.VetSystemRework.service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -46,6 +48,15 @@ public class AnimalService {
 	public void remover(Long id) {
 		repository.deleteById(id);
 		
+	}
+	@Transactional(readOnly = true)
+	public Set<Animal> buscarPorTitulos(String[] titulos) {
+		return repository.findByTitulos(titulos);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Animal> buscarAnimaisByTermo(String termo) {
+		return repository.findAnimaisByTermo(termo);
 	}
 
 }

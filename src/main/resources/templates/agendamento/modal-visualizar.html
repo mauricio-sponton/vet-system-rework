@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+	<!-- Modal -->
+	<div th:fragment="modal-form" class="modal fade"
+		id="modal-agendamento-visualizar" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg"
+			role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">Informações
+						do agendamento</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<span th:text="${erro}" class="msg-erro"></span>
+					<div class="visualizacao">
+						<div class="modal-body agenda" style="font-size: 1.2em; color: black">
+							<div class="dados-agenda">
+								<p>Tipo do agendamento: </p> <span id="visualizar-title"></span><br> 
+								<p>Início: </p><span id="visualizar-start"></span>  <br>
+								<p>Término: </p><span id="visualizar-end"></span><br> 
+								<p>Agendamento realizado por: </p><span id="visualizar-secretaria"></span><br> 
+							</div>
+							
+							<div class="dados-agenda">
+								<p>Veterinário: </p><span id="visualizar-veterinario"></span><br>
+								<p>Cliente: </p><span id="visualizar-cliente">
+									</span><br>
+								
+								<p>Paciente: </p><span id="visualizar-paciente"></span><br>
+								<p>Anotações: </p><span id="visualizar-description"></span>
+							</div>
+						</div>
+						<div class="modal-footer" >
+
+							<button sec:authorize="hasAuthority('SECRETARIA')"
+								id="edit-agendamento" class="btn btn-warning" style="float: left">Editar</button>
+
+							<button id="edit-excluir" class="btn btn-danger btn-cancelar" style="float: left">Excluir</button>
+						</div>
+
+					</div>
+
+
+
+					<div class="edicao">
+
+						<form th:action="@{/agenda/salvar}" method="POST"
+							enctype="multipart/form-data" th:object="${agendamento}"
+							id="formA">
+							<div class="form-row">
+
+								<div class="form-group col-md-4">
+									<label for="tipo-edicao">Tipo</label> <select
+										th:classappend="${#fields.hasErrors('tipo')} ? 'is-invalid'"
+										id="tipo-edicao" class="form-control" th:field=*{tipo}>
+										<option value="">Selecione</option>
+										<option th:value="Consulta" th:text="Consulta"></option>
+										<option th:value="Retorno" th:text="Retorno"></option>
+									</select>
+									<div class="invalid-feedback">
+										<span th:errors="*{tipo}"></span>
+									</div>
+								</div>
+								<div class="form-group col-md-4" id="paciente-cadastrado-edicao">
+
+									<label for="animal-edicao">Paciente</label> <input type="text"
+										class="form-control" id="animal-edicao" placeholder="Rex..."
+										th:name="cadastrado"
+										th:classappend="${#fields.hasErrors('animal.nome')} ? 'is-invalid'"
+										th:field="*{animal.nome}" />
+										<span class="erro-animal" style="display:none"></span>
+									<div class="invalid-feedback">
+										<span th:errors="*{animal.nome}"></span>
+									</div>
+								</div>
+								<div class="form-group col-md-4"
+									id="paciente-nao-cadastrado-edicao">
+									<label for="sem_cadastro-edicao">Paciente</label> <input
+										type="text" class="form-control" id="sem_cadastro-edicao"
+										placeholder="Taz..."
+										th:classappend="${#fields.hasErrors('sem_cadastro')} ? 'is-invalid'"
+										th:field="*{sem_cadastro}" />
+									<div class="invalid-feedback">
+										<span th:errors="*{sem_cadastro}"></span>
+									</div>
+								</div>
+								<div class="form-group col-md-2">
+									<input type="checkbox" id="cadastrado-edicao" value="1"
+										name="cadastrado"> <label for="cadastrado">Paciente
+										não cadastrado</label>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<div class="form-group col-md-4">
+									<label for="inicio-edicao">Selecione a data de início</label> <input
+										class="form-control" type="datetime-local" id="inicio-edicao"
+										name="inicio"
+										th:classappend="${#fields.hasErrors('inicio')} ? 'is-invalid'"
+										th:field="*{inicio}" />
+									<div class="invalid-feedback">
+										<span th:errors="*{inicio}"></span>
+									</div>
+								</div>
+								<div class="form-group col-md-4">
+									<label for="fim-edicao">Selecione a data de fim</label> <input
+										class="form-control" type="datetime-local" id="fim-edicao"
+										th:classappend="${#fields.hasErrors('fim')} ? 'is-invalid'"
+										th:field="*{fim}" />
+									<div class="invalid-feedback">
+										<span th:errors="*{fim}"></span>
+									</div>
+								</div>
+								<div class="form-group col-md-4">
+									<label for="color-edicao">Selecione a cor desejada:</label> <input
+										th:classappend="${#fields.hasErrors('color')} ? 'is-invalid'"
+										type="color" id="color-edicao" th:field=*{color}
+										class="form-control" name="color" value="#36299e">
+									<div class="invalid-feedback">
+										<span th:errors="*{color}"></span>
+									</div>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-12">
+									<div class="card">
+									  <div class="card-header">
+									    Indique o veterinário desejado
+									  </div>
+									  <div class="card-body" id="vets-edicao">										  									    
+											<!-- options by jQuery -->
+									  </div>									  							  
+									</div>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-12">
+									<label for="descricao-edicao">Anotações</label>
+									<textarea class="form-control" id="descricao-edicao"
+										placeholder="Taz..." autofocus="autofocus"
+										th:field="*{descricao}"
+										th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid'"></textarea>
+									<div class="invalid-feedback">
+										<span th:errors="*{descricao}"></span>
+									</div>
+								</div>
+
+							</div>
+							<input type="hidden" id="id-edicao" th:field="*{id}" />
+							<button type="submit" class="btn btn-primary ">Salvar</button>
+
+						</form>
+						<div class="modal-footer">
+							<button id="cancela-edt" class="btn btn-danger btn-cancelar">Cancelar</button>
+						</div>
+					</div>
+					<div class="exclusao">
+						<div class="modal-body">Você tem certeza que deseja excluir
+							esse ítem?</div>
+						<div class="modal-footer">
+							<button id="cancela-exclusao" type="button"
+								class="btn btn-danger btn-cancelar">Cancelar</button>
+							<a id="apagar_evento" type="button" class="btn btn-primary btn-success">Confirmar</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

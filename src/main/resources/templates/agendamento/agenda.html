@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+<title>Vet System - Agenda</title>
+<style>
+
+
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+    color: black
+  }
+
+ .visualizacao{
+ 	display: block
+ } 
+ .edicao{
+ 	display: none
+ }
+ .exclusao{
+ 	display: none
+ }
+ #paciente-nao-cadastrado{
+ 	display: none
+ }
+ #paciente-cadastrado{
+ 	display: block
+ }
+</style>
+</head>
+<body>
+	<section class="layout-content" layout:fragment="corpo">
+	<ul class="breadcrumb">
+			<li><a th:href="@{/home}">Dashboard </a></li>
+			<li class="active"> Agenda</li>
+			
+		</ul>
+	<div th:replace="fragments/alert :: alerta-sucesso"></div>
+	
+	<h1 class = "agenda-h">Agenda</h1>
+	<a class="btn-cadastrar-usuario" style="margin-left:20px;"sec:authorize="hasAuthority('AGENDA_WRITE')" href="#" role="button"
+					data-toggle="modal" data-target="#modal-agendamento">Novo Evento</a> <span
+					th:replace="agendamento/modal :: modal-form"></span>
+					<span
+					th:replace="agendamento/modal-visualizar :: modal-form"></span>
+		<div style="margin-left:2%" id='calendar'></div>
+
+	</section>
+	<script th:src="@{/js/agendamento.js(v=${version})}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+      $(document).ready(function(){
+    	$("#animal, #animal-edicao").autocomplete({
+    	  source : function(request, response) {
+    	  	$.ajax({
+    	  		method : "GET",
+    	  		url : "/pacientes/titulo",
+    	  		data : {
+    	  			termo : request.term
+    	  		},
+    	  		success : function(data) {
+    	  			var newArray = new Array();
+    	  		    console.log(data)
+    	  		    var i = 0;
+    	  		    $.each(data, function (k,v) {
+    	  		    var newObject = {
+    	  		       label: v.nome + " (" + v.cliente.nome +")",
+    	  		       value: v.nome
+    	  		                    };
+    	  		                    console.log(newObject)
+    	  		                    newArray[i] = newObject;
+    	  		                    i++;
+    	  		                });
+
+    	  		                response(newArray);
+    	  						
+    	  						
+    	  					}
+    	  				})
+    	  			}
+    	  	  }); 
+    	 
+    	
+    	  $.getJSON('/agenda/todos', function(data){
+
+    		  var calendarEl = document.getElementById('calendar');	
+  			  var calendar = new FullCalendar.Calendar(calendarEl,  {
+  		    	
+  			      headerToolbar: {
+  			        left: 'prev,next today',
+  			        center: 'title',
+  			        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+  			      },
+  			      locale: 'pt-br',
+  			      navLinks: true, // can click day/week names to navigate views
+  			      businessHours: true, // display business hours
+  			      editable: true,
+  			      selectable: true,
+  			      
+  			    eventClick: function(data) {
+  			    	var inicio = moment(data.event.start).locale('pt-br').format('dddd, DD[/]MM[/]YYYY, [às] HH:mm');
+  			    	var termino = moment(data.event.end).locale('pt-br').format('dddd, DD[/]MM[/]YYYY, [às] HH:mm');
+  			    	var inicio_edt = moment(data.event.start).format('YYYY-MM-DDTHH:mm:ss.SSS');
+  			    	var fim_edt = moment(data.event.end).format('YYYY-MM-DDTHH:mm:ss.SSS');
+  			   		//apagar
+  			   		$("#apagar_evento").attr("href", "/agenda/excluir/" + data.event.id);
+  			    	//visualizacao
+  			    	$("#visualizar-start").text(inicio);
+  			    	$("#visualizar-end").text(termino);
+  			    	$("#visualizar-veterinario").text(data.event.extendedProps.veterinario.nome);
+  			    	$("#visualizar-title").text(data.event.title);
+  			    	if(data.event.extendedProps.description != ""){
+  			    		$("#visualizar-description").show();
+  			    		 $("#visualizar-description").text(data.event.extendedProps.description).append('<br>');
+  			    		
+  			    	}else{
+  			    		$("#visualizar-description").text("Sem informações cadastradas.").append('<br>');
+  			    	}
+  			    	$("#visualizar-secretaria").text(data.event.extendedProps.secretaria.nome);
+  			    
+  			    	if(data.event.extendedProps.paciente != null){
+  			    		$("#visualizar-cliente").show();
+  			    		$("#visualizar-cliente").text(data.event.extendedProps.cliente);
+  			    		$("#visualizar-paciente").text(data.event.extendedProps.paciente);
+  			    	}else{
+  			    		$("#visualizar-cliente").hide();
+  			    		$("#visualizar-paciente").text(data.event.extendedProps.pacienteNaoCadastrado);
+  			    	}
+  			    	//edicao
+  			    	
+  			    		$("#id-edicao").val(data.event.id);
+  	  			    	$("#tipo-edicao").val(data.event.title);
+  	  			    	$("#inicio-edicao").val(inicio_edt);
+  	  			    	$("#fim-edicao").val(fim_edt);
+  	  			    	$("#color-edicao").val(data.event.backgroundColor);
+  	  			    	$("#descricao-edicao").val(data.event.extendedProps.description);
+  	  			    	$("#vets-edicao").append( 
+			    				 '<div class="custom-control custom-radio">'	
+			    				+  '<input class="custom-control-input" type="radio" id="customRadio" name="veterinario.id" value="'+ data.event.extendedProps.veterinario.id +'" required checked="checked">'
+								+  '<label class="custom-control-label" for="customRadio">'+ data.event.extendedProps.veterinario.nome +'</label>'
+								+  '<div class="invalid-feedback">Médico é obrigatório</div>'
+								+'</div>'
+			    		);
+			    		
+  	  			    	$(".modal-title").text("Informações do Agendamento");
+  	  			    	if(data.event.extendedProps.paciente != null){
+  	  			    		$("#paciente-cadastrado-edicao").show();
+  	  			    		$("#paciente-nao-cadastrado-edicao").hide();
+  	  			    		$("#animal-edicao").val(data.event.extendedProps.paciente);
+  	  			    	}else{
+  	  			    		$("#paciente-cadastrado-edicao").hide();
+  	  			    		$("#paciente-nao-cadastrado-edicao").show();
+  	  			    		 $("#cadastrado-edicao").prop("checked", true);
+  	  			    		$("#sem_cadastro-edicao").val(data.event.extendedProps.pacienteNaoCadastrado);
+  	  			    	}
+  			    	
+  			    	
+  			    	$("#modal-agendamento-visualizar").modal('show');
+  			      
+  			     
+  			    },
+  			 
+  			   events: data
+  				  
+  				  
+  			    });
+  		    calendar.render();
+ 	   
+    	  })
+	   
+	   
+    	  })
+    	  
+    	   $("#cadastrado").on('change', function(){
+    		  if($(this).is(':checked')){
+    			  $('#paciente-cadastrado').hide(); 
+      		      $('#paciente-nao-cadastrado').show();
+      		      $('#animal').val("");
+     		  }else{
+     			 $('#paciente-cadastrado').show(); 
+     		     $('#paciente-nao-cadastrado').hide();
+     		     $('#sem_cadastro').val("");
+     		  }  
+    	   });
+      $("#cadastrado-edicao").on('change', function(){
+		  if($(this).is(':checked')){
+			  $('#paciente-cadastrado-edicao').hide(); 
+  		      $('#paciente-nao-cadastrado-edicao').show();
+  		      $('#animal-edicao, #sem_cadastro-edicao').val("");
+ 		  }else{
+ 			 $('#paciente-cadastrado-edicao').show(); 
+ 		     $('#paciente-nao-cadastrado-edicao').hide();
+ 		     $('#animal-edicao, #sem_cadastro-edicao').val("");
+ 		  }  
+	   });
+    			  
+    	   
+    	  $("#edit-agendamento").on('click', function(){
+    		  $('.visualizacao').slideToggle();
+    		  $('.edicao').slideToggle();
+    	  })
+    	    $("#edit-excluir").on('click', function(){
+    		  $('.visualizacao').slideToggle();
+    		  $('.exclusao').slideToggle();
+    	  })
+    	   $("#cancela-edt").on('click', function(){
+    		   $('.edicao').slideToggle();
+    		   $('.visualizacao').slideToggle();
+    		 
+    	  })
+    	   $("#cancela-exclusao").on('click', function(){
+    		   $('.exclusao').slideToggle();
+    		   $('.visualizacao').slideToggle();
+    		 
+    	  })
+		  $("#modal-agendamento-visualizar").on("hidden.bs.modal", function(){
+			 
+			  $('.visualizacao').show();
+			  $('.edicao').hide();
+			  $('.exclusao').hide();
+		  });
+		  if($("#modal-agendamento .msg-erro").html() != "") {
+			 
+				$("#modal-agendamento").modal('show');
+				$("#modal-agendamento .msg-erro, #modal-agendamento .invalid-feedback span, .erro-animal, .erro-vet").css("color", "red");
+				$("#modal-agendamento .is-invalid").css("border", "1px solid red");
+				$(".modal-title").text("Novo Agendamento");
+				if($("#animal").val() == ""){
+					$("#animal").addClass('is-invalid');
+					$(".erro-animal").show().text("Por favor o nome do paciente").css("font-size", "12px");
+				}
+				if($("#veterinario").val() == ""){
+					$("#veterinario").addClass('is-invalid');
+					$(".erro-vet").show().text("Por favor informe o nome do veterinário").css("font-size", "12px");
+				}
+				$(".is-invalid").css("border", "1px solid red");
+		  }
+		  if($("#modal-agendamento-visualizar .msg-erro").html() != "") {
+			 
+				$("#modal-agendamento-visualizar .msg-erro, #modal-agendamento .invalid-feedback span, .erro-animal, .erro-vet").css("color", "red");
+				$("#modal-agendamento-visualizar .is-invalid").css("border", "1px solid red");
+				$(".modal-title").text("Informações do Agendamento");
+				if($("#animal-edicao").val() == ""){
+					$("#animal-edicao").addClass('is-invalid');
+					$(".erro-animal").show().text("Por favor o nome do paciente").css("font-size", "12px");
+				}
+				if($("#veterinario-edicao").val() == ""){
+					$("#veterinario-edicao").addClass('is-invalid');
+					$(".erro-vet").show().text("Por favor informe o nome do veterinário").css("font-size", "12px");
+				}
+				$(".is-invalid").css("border", "1px solid red");
+		  }
+
+			$("#modal-agendamento, #modal-agendamento-visualizar").on("hidden.bs.modal", function() {
+				 $("#cadastrado-edicao, #cadastrado").prop("checked", false);
+				$(".is-invalid").removeClass("is-invalid").removeAttr('style');
+				$("#modal-agendamento .msg-erro, #modal-agendamento-visualizar .msg-erro").hide();
+				$(".erro-animal").hide();
+				$(".erro-vet").hide();
+				$("#vets, #vets-edicao").val("");
+				 $('div').remove(".custom-radio");
+				
+			});
+			
+			$(".btn-cadastrar-usuario").on("click", function(){
+				$(".form-control").val("");
+				$(".modal-title").text("Novo Agendamento");
+			});
+			$("#inicio, #fim, #inicio-edicao, #fim-edicao").on('change',function(){
+				$("#vets, #vets-edicao").val("");
+			})
+ 			$('#inicio, #fim').on('change', function(){
+ 				 $('div').remove(".custom-radio");
+ 				var fim = $("#fim").val();	
+				var inicio = $("#inicio").val();
+				console.log(inicio);
+				console.log(fim);
+				$("#vets div strong").text("");
+				var diaInicial = moment( $("#inicio").val()).weekday() + 1;
+				var diaFinal = moment( $("#fim").val()).weekday() + 1;
+						$.ajax({
+							method : "GET",
+							url : "/funcionarios/disponiveis",
+							data : {
+								inicio : inicio,
+								fim : fim,
+								diaInicial : diaInicial,
+								diaFinal : diaFinal
+		
+							},
+							success : function(data) {
+								console.log(data.length)
+								if(data.length == 0){
+									$("#vets").append( 
+						    				 '<div>'	
+						    				+  '<strong style = "color: red">Não há funcionários trabalhando nesse horário!!</strong>'
+							
+											+'</div>'
+						    			);
+								}
+								var ultimo = data.length - 1; 
+								
+								$.each(data, function (k, v) {
+									
+									if ( k == ultimo ) {
+						    			$("#vets").append( 
+						    				 '<div class="custom-control custom-radio">'	
+						    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="funcionario.id" value="'+ v.id +'" required>'
+											+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+											+  '<div class="invalid-feedback">Funcionário é obrigatório</div>'
+											+'</div>'
+						    			);
+									} else {
+						    			$("#vets").append( 
+						    				 '<div class="custom-control custom-radio">'	
+						    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="funcionario.id" value="'+ v.id +'" required>'
+											+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+											+'</div>'
+						        		);	            				
+									}
+							    });
+							}
+						})
+					
+				
+ 			})
+ 			
+				
+ 			$('#inicio-edicao, #fim-edicao').on('ready change', function(){
+ 				 $('div').remove(".custom-radio");
+ 				var fim = $("#fim-edicao").val();			
+				var inicio = $("#inicio-edicao").val();
+				$("#vets-edicao div strong").text("");
+				var diaInicial = moment( $("#inicio-edicao").val()).weekday() + 1;
+				var diaFinal = moment( $("#fim-edicao").val()).weekday() + 1;
+						$.ajax({
+							method : "GET",
+							url : "/funcionarios/disponiveis",
+							data : {
+								inicio : inicio,
+								fim : fim,
+								diaInicial : diaInicial,
+								diaFinal : diaFinal
+		
+							},
+							success : function(data) {
+								var ultimo = data.length - 1; 
+								if(data.length == 0){
+									$("#vets-edicao").append( 
+						    				 '<div>'	
+						    				+  '<strong style = "color: red">Não há funcionários trabalhando nesse horário!!</strong>'
+							
+											+'</div>'
+						    			);
+								}
+								$.each(data, function (k, v) {
+									
+									if ( k == ultimo ) {
+						    			$("#vets-edicao").append( 
+						    				 '<div class="custom-control custom-radio">'	
+						    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="funcionario.id" value="'+ v.id +'" required>'
+											+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+											+  '<div class="invalid-feedback">Funcionário é obrigatório</div>'
+											+'</div>'
+						    			);
+									} else {
+						    			$("#vets-edicao").append( 
+						    				 '<div class="custom-control custom-radio">'	
+						    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="funcionario.id" value="'+ v.id +'" required>'
+											+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+											+'</div>'
+						        		);	            				
+									}
+							    });
+							}
+						})
+					
+				
+ 			})
+  	
+	</script>
+	
+
+</body>
+</html>

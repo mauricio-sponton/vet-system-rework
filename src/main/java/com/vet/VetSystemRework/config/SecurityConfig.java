@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/clientes/**").hasAuthority("CLIENTE_WRITE")
 		.antMatchers("/racas/**", "/especies/**").permitAll()
 		.antMatchers("/imunizacoes/**").permitAll()
+		.antMatchers("/agenda/**").hasAnyAuthority("AGENDA_WRITE", "AGENDA_READ")
 		//.antMatchers("/clientes/listar").hasAnyAuthority("CLIENTE_WRITE, CLIENTE_READ")
 		
 		.anyRequest().authenticated()
