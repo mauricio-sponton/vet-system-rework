@@ -41,13 +41,15 @@
 								<p>Paciente: </p><span id="visualizar-paciente"></span><br>
 								<p>Anotações: </p><span id="visualizar-description"></span>
 							</div>
+					
 						</div>
 						<div class="modal-footer" >
 
-							<button sec:authorize="hasAuthority('SECRETARIA')"
+							<button sec:authorize="hasAuthority('AGENDA_WRITE')"
 								id="edit-agendamento" class="btn btn-warning" style="float: left">Editar</button>
 
-							<button id="edit-excluir" class="btn btn-danger btn-cancelar" style="float: left">Excluir</button>
+							<button sec:authorize="hasAuthority('AGENDA_WRITE')" id="edit-excluir" class="btn btn-danger btn-cancelar" style="float: left">Excluir</button>
+							<button sec:authorize="hasAuthority('AGENDA_READ')" id="edit-excluir" class="btn btn-danger btn-cancelar" style="float: left">Cancelar Consulta</button>
 						</div>
 
 					</div>

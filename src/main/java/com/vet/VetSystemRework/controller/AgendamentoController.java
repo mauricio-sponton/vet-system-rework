@@ -1,5 +1,7 @@
 package com.vet.VetSystemRework.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -174,12 +177,13 @@ public class AgendamentoController {
 		return allEvents;
 	}
 
-//	@GetMapping("/excluir/{id}")
-//	public String excluir(@PathVariable("id") Long id, RedirectAttributes attr, @AuthenticationPrincipal User user) {
-//		Agendamento agendamento = service.buscarPorId(id);
+	@GetMapping("/excluir/{id}")
+	public String excluir(@PathVariable("id") Long id, RedirectAttributes attr, @AuthenticationPrincipal User user) {
+		//Agendamento agendamento = service.buscarPorId(id);
 //		LocalDate data = LocalDate.now();
 //		LocalTime horas = agendamento.getInicio().toLocalTime();
 //		String paciente = null;
+//		
 //		if (agendamento.getAnimal() != null) {
 //			paciente = agendamento.getAnimal().getNome();
 //		} else {
@@ -215,9 +219,9 @@ public class AgendamentoController {
 //			attr.addFlashAttribute("sucesso", "Operação realizada com sucesso.");
 //			return "redirect:/agenda/abrir";
 //		}
-//		service.remover(id);
-//		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso.");
-//		return "redirect:/agenda/abrir";
-//	}
+		service.remover(id);
+		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso.");
+		return "redirect:/agenda/abrir";
+	}
 
 }
