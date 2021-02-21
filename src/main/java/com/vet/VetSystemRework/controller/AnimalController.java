@@ -103,8 +103,12 @@ public class AnimalController {
 			}
 
 		}else {
-			foto = fotoService.buscarFotoId(animal.getFoto().getId());
-			animal.setFoto(foto);
+			foto = animal.getFoto().hasNotId() ? null : fotoService.buscarFotoId(animal.getFoto().getId());
+			
+			if(foto != null) {
+				animal.setFoto(foto);
+			}
+			
 		}
 
 		// -------------------------------------------------
@@ -112,13 +116,13 @@ public class AnimalController {
 		String mensagem = "";
 		HistoricoAnimal historico = null;
 		ValidacoesHistorico validacao = new ValidacoesHistorico();
-		if (user.getAuthorities().stream()
-				.anyMatch(a -> !a.getAuthority().equals(PermissaoTipo.ADMIN_WRITE.getDesc()))) {
+		
+			
 			Funcionario funcionario = funcionarioService.buscarPorEmail(user.getUsername());
 			String perfil = "";
-			for (int i = 0; i <= funcionario.getUsuario().getPerfis().size(); i++) {
-				perfil = funcionario.getUsuario().getPerfis().get(1).getDesc();
-			}
+			perfil = funcionario.getUsuario().getPerfis().size() > 1 ?
+				funcionario.getUsuario().getPerfis().get(1).getDesc() 
+				: funcionario.getUsuario().getPerfis().get(0).getDesc() ;
 			
 			// CADASTRO NO HISTÓRICO DO PACIENTE CASO ELE NÃO TENHA ID
 			if (animal.hasNotId()) {
@@ -139,7 +143,7 @@ public class AnimalController {
 				}
 				historico = validacao.editarCadastro(animal, status, funcionario, perfil);
 			}
-		}
+		
 		try {
 
 			animal.setEspecie(especie);
