@@ -76,8 +76,10 @@ public class FuncionarioController {
 			}
 
 		}else {
-			foto = fotoService.buscarFotoId(funcionario.getFoto().getId());
-			funcionario.setFoto(foto);
+			foto = funcionario.getFoto().hasNotId() ? null : fotoService.buscarFotoId(funcionario.getFoto().getId());
+			if(foto != null) {
+				funcionario.setFoto(foto);
+			}
 		}
 		service.salvar(funcionario);
 		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso");
