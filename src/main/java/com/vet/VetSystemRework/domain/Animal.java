@@ -67,9 +67,9 @@ public class Animal extends AbstractEntity {
 	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
 	private List<HistoricoAnimal> historico;
 	
-//	@JsonIgnore
-//	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
-//	private List<Internacao> internacao;
+	@JsonIgnore
+	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
+	private List<Internacao> internacao;
 //	
 //	@JsonIgnore
 //	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
@@ -79,17 +79,17 @@ public class Animal extends AbstractEntity {
 //	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
 //	private List<Aplicacao> aplicacoes;
 //	
-//	@JsonIgnore
-//	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
-//	private List<Agendamento> agendamentos;
-//	
-//	public List<Agendamento> getAgendamentos() {
-//		return agendamentos;
-//	}
-//
-//	public void setAgendamentos(List<Agendamento> agendamentos) {
-//		this.agendamentos = agendamentos;
-//	}
+	@JsonIgnore
+	@OneToMany(mappedBy = "animal", cascade = CascadeType.REMOVE)
+	private List<Agendamento> agendamentos;
+	
+	public List<Agendamento> getAgendamentos() {
+		return agendamentos;
+	}
+
+	public void setAgendamentos(List<Agendamento> agendamentos) {
+		this.agendamentos = agendamentos;
+	}
 
 	public String[] getCaracteristicas() {
 		return caracteristicas;
@@ -126,13 +126,13 @@ public class Animal extends AbstractEntity {
 		this.status = status;
 	}
 
-//	public List<Internacao> getInternacao() {
-//		return internacao;
-//	}
-//
-//	public void setInternacao(List<Internacao> internacao) {
-//		this.internacao = internacao;
-//	}
+	public List<Internacao> getInternacao() {
+		return internacao;
+	}
+
+	public void setInternacao(List<Internacao> internacao) {
+		this.internacao = internacao;
+	}
 
 	public String getAlergias() {
 		return alergias;
@@ -213,7 +213,10 @@ public class Animal extends AbstractEntity {
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
-
+	
+	public boolean isAnimalInternado() {
+		return this.getStatus().equals("Internado");
+	}
 
 	
 	

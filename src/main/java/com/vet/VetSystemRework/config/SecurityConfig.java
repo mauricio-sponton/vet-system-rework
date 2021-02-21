@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/perfis/**").hasAuthority("ADMIN_WRITE")
 		.antMatchers("/clientes/**").hasAuthority("CLIENTE_WRITE")
 		.antMatchers("/racas/**", "/especies/**").permitAll()
-		.antMatchers("/imunizacoes/**").permitAll()
+		.antMatchers("/imunizacoes/**", "/internacoes/**").permitAll()
 		.antMatchers("/agenda/**").hasAnyAuthority("AGENDA_WRITE", "AGENDA_READ")
 		//.antMatchers("/clientes/listar").hasAnyAuthority("CLIENTE_WRITE, CLIENTE_READ")
 		

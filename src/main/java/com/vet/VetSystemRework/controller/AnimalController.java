@@ -41,6 +41,7 @@ import com.vet.VetSystemRework.service.FotoService;
 import com.vet.VetSystemRework.service.FuncionarioService;
 import com.vet.VetSystemRework.service.HistoricoAnimalService;
 import com.vet.VetSystemRework.service.RacaService;
+import com.vet.VetSystemRework.validacao.ValidacoesHistorico;
 
 @Controller
 @RequestMapping("pacientes")
@@ -66,11 +67,13 @@ public class AnimalController {
 
 	@Autowired
 	private ClienteService clienteService;
+	
+
 
 	// Cadastrar o paciente
 	@PostMapping("/salvar")
 	public String salvarAnimal(@Valid Animal animal, BindingResult result, RedirectAttributes attr,
-			@AuthenticationPrincipal UserDetails user, @RequestParam("file") MultipartFile file, ModelMap model) {
+			@AuthenticationPrincipal UserDetails user, @RequestParam(required = false, value = "file") MultipartFile file, ModelMap model) {
 		if (result.hasErrors()) {
 			model.addAttribute("erro", "Por favor preencha os dados");
 			return "animal/lista";
@@ -99,23 +102,16 @@ public class AnimalController {
 				attr.addFlashAttribute("falha", "Erro ao cadastrar foto!");
 			}
 
+		}else {
+			foto = fotoService.buscarFotoId(animal.getFoto().getId());
+			animal.setFoto(foto);
 		}
-		if (file.isEmpty() && animal.hasId()) {
-			foto = animal.getFoto().hasId() ? fotoService.buscarFotoId(animal.getFoto().getId()) : null;
 
-			if (foto == null) {
-				animal.setFoto(null);
-			} else {
-				animal.setFoto(foto);
-				fotoService.salvar(foto);
-			}
-
-		}
 		// -------------------------------------------------
 
-	
 		String mensagem = "";
 		HistoricoAnimal historico = null;
+		ValidacoesHistorico validacao = new ValidacoesHistorico();
 		if (user.getAuthorities().stream()
 				.anyMatch(a -> !a.getAuthority().equals(PermissaoTipo.ADMIN_WRITE.getDesc()))) {
 			Funcionario funcionario = funcionarioService.buscarPorEmail(user.getUsername());
@@ -123,12 +119,13 @@ public class AnimalController {
 			for (int i = 0; i <= funcionario.getUsuario().getPerfis().size(); i++) {
 				perfil = funcionario.getUsuario().getPerfis().get(1).getDesc();
 			}
-
+			
 			// CADASTRO NO HISTÓRICO DO PACIENTE CASO ELE NÃO TENHA ID
 			if (animal.hasNotId()) {
 				mensagem = "Dados cadastrados com sucesso!";
 				animal.setStatus("Normal");
-				historico = historicoAnimalService.novoCadastro(perfil, funcionario, animal);
+				historico = validacao.novoCadastro(perfil, funcionario, animal);
+				
 
 			}
 			// CADASTRO NO HISTÓRICO DO PACIENTE CASO ELE TENHA ID
@@ -140,7 +137,7 @@ public class AnimalController {
 				} else {
 					animal.setStatus("Internado");
 				}
-				historico = historicoAnimalService.editarCadastro(animal, status, funcionario, perfil);
+				historico = validacao.editarCadastro(animal, status, funcionario, perfil);
 			}
 		}
 		try {

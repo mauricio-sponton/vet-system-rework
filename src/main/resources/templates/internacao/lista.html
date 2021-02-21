@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{layout}"
+	class="no-js">
+<head>
+<meta charset="UTF-8" />
+<title>Internações</title>
+<style>
+	.cards tbody tr {
+   float: left;
+   width: 19rem;
+   margin: 0.5rem;
+   border: 0.0625rem solid rgba(0, 0, 0, .125);
+   border-radius: .25rem;
+   box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+}
+
+.cards tbody td {
+   display: block;
+}
+
+.cards thead {
+   display: none;
+}
+
+.cards td:before {
+   content: attr(data-label);
+   position: relative;
+   float: left;
+   color: #808080;
+   min-width: 4rem;
+   margin-left: 0;
+   margin-right: 1rem;
+   text-align: left;   
+}
+
+tr.selected td:before {
+   color: #CCC;
+}
+
+.table .avatar {
+   width: 50px;
+}
+
+.cards .avatar {
+   width: 150px;
+   margin: 15px;
+}
+</style>
+</head>
+<body>
+
+	<section class="layout-content" layout:fragment="corpo">
+		<main role="main">
+			<ul class="breadcrumb">
+				<li><a th:href="@{/home}">Dashboard </a></li>
+				<li class='active'>Internações</li>
+			</ul>
+			<div class="container">
+
+
+				<div th:replace="fragments/alert :: alerta-sucesso"></div>
+				<h2 class="internacoes-cadastradas">Internações Cadastradas</h2>
+				
+<!-- 				<table id="table-internacoes" -->
+<!-- 					class="table table-sm table-striped nowrap" style="width: 100%"> -->
+<!-- 					<thead class="thead-dark"> -->
+<!-- 						<tr> -->
+							
+<!-- 							<th scope="col">Status</th> -->
+<!-- 							<th scope="col">Paciente</th> -->
+<!-- 							<th scope="col">Admissão</th> -->
+<!-- 							<th scope="col">Alta</th> -->
+<!-- 							<th scope="col">Editar</th> -->
+<!-- 							<th scope="col">Excluir</th> -->
+<!-- 							<th scope="col">Visualizar</th> -->
+<!-- 						</tr> -->
+<!-- 					</thead> -->
+<!-- 				</table> -->
+
+								<div th:each="i, iStat : ${internacaoPage.content}"
+									class="card mb-3" style="max-width: 540px;">
+									<div class="row g-0">
+										<div class="col-md-4">
+											<img src="..." alt="...">
+										</div>
+										<div class="col-md-8">
+											<div class="card-body">
+												<h5 class="card-title" th:text="${i.animal.nome}">Card
+													title</h5>
+												<p class="card-text" th:text="${i.descricao}"></p>
+												<p class="card-text">
+													<small class="text-muted">Last updated 3 mins ago</small>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<nav aria-label="Page navigation example"
+									th:if="${internacaoPage.totalPages > 0}">
+									<ul class="pagination">
+										<li th:class="${paginaAtual == 1} ? 'page-item disabled' : 'page-item'"><a class="page-link"
+											th:href="@{/internacoes/listar(tamanho=${internacaoPage.size}, pagina=${paginaAtual - 1})}">Anterior</a></li>
+										<li th:each="pageNumber : ${pageNumbers}" class="page-item"><a
+											class="page-link"
+											th:href="@{/internacoes/listar(tamanho=${internacaoPage.size}, pagina=${pageNumber})}"
+											th:text=${pageNumber}>1</a></li>
+
+										<li th:class="${paginaAtual == internacaoPage.getTotalPages()} ? 'page-item disabled' : 'page-item'"><a class="page-link"
+											th:href="@{/internacoes/listar(tamanho=${internacaoPage.size}, pagina=${paginaAtual + 1})}">Próximo</a></li>
+									</ul>
+								</nav>
+			</div>
+
+			<a class="btn-cadastrar-usuario" href="#" role="button"
+				data-toggle="modal" data-target="#modal-internacao">Nova
+				Internação</a> <span th:replace="internacao/modal :: modal-form"></span>
+
+
+
+		</main>
+
+	</section>
+	<script th:src="@{/js/internacao.js(v=${version})}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+	 var internacao = [[${internacao.id}]];
+	 var temperat = [[${internacao.temperatura}]];
+		var pes = [[${internacao.peso}]];
+		$(document).ready(
+				function() {
+					document.getElementById('dataEntrada').max = new Date(
+							new Date().getTime()
+									- new Date().getTimezoneOffset() * 60000)
+							.toISOString().split("T")[0];
+				})
+		$(document).ready(
+				function() {
+					document.getElementById('dataSaida').min = new Date(
+							new Date().getTime()
+									- new Date().getTimezoneOffset() * 60000)
+							.toISOString().split("T")[0];
+				})
+		$("#animal").autocomplete({
+
+			source : function(request, response) {
+				$.ajax({
+					method : "GET",
+					url : "/pacientes/titulo",
+					data : {
+						termo : request.term
+					},
+					success : function(data) {
+			               var newArray = new Array();
+			               console.log(data)
+			               var i = 0;
+			                $.each(data, function (k,v) {
+			                    var newObject = {
+			                        label: v.nome + " (" + v.cliente.nome +")",
+			                    	value: v.nome
+			                    };
+			                    console.log(newObject)
+			                    newArray[i] = newObject;
+			                    i++;
+			                });
+
+			                response(newArray);
+							
+							
+						}
+				})
+			}
+		});
+		$(document).ready(function(){
+			if(internacao != null){
+				$("#modal-internacao").modal('show');
+				$(".modal-title").text("Editar Internação");
+				$("#animal").attr('readonly', 'readonly');
+				var teste = $("#temperatura").val();
+				var peso = $("#peso").val();
+				if(teste != temperat){
+					var t =temperat.toString().replace('.', ',');
+					$("#temperatura").val(t);
+				}
+				if(peso != pes){
+					var p =pes.toString().replace('.', ',');
+					$("#peso").val(p);
+				}
+			}
+			if(internacao == null){
+				$(".modal-title").text("Nova Internação");
+			}
+			if ($("#msg-erro").html() != "") {
+				$("#modal-internacao").modal('show');
+				if($("#animal").val() == ""){
+					$("#animal").addClass('is-invalid');
+					$("#erro-animal").show().text("Por favor informe a espécie");
+				}
+				$
+				$("#msg-erro").css("color", "red");
+				$(".is-invalid").css("border", "1px solid red");
+			}
+
+			$("#modal-internacao").on("hidden.bs.modal", function() {
+				$(".is-invalid").removeClass("is-invalid").removeAttr('style');
+				$("#msg-erro").hide();
+				$("#modal-internacao").modal('hide');
+				
+			});
+			
+			$(".btn-cadastrar-usuario").on("click", function(){
+				$(".form-control").val("");
+				$("#animal").removeAttr('readonly');
+				$("#erro-especie").hide();
+				$(".modal-title").text("Nova Internação");
+			});	
+			$('#confirm-modal').on('show.bs.modal', function(){
+				$(".modal-title").text("Excluir Internação");
+			})
+		});	
+		
+	</script>
+</body>
+</html>

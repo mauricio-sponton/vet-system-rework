@@ -27,6 +27,8 @@ public class FotoService {
 	@Autowired
 	private FotoRepository fotoRepository;
 
+	
+	
 	@Transactional(readOnly = false)
 	public void salvarFoto(MultipartFile file, Foto foto) throws Exception {
 

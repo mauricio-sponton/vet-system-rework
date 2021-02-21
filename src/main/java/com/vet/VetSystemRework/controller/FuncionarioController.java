@@ -54,7 +54,7 @@ public class FuncionarioController {
 
 	@PostMapping("/salvar")
 	public String salvarDadosPessoais(@Valid Funcionario funcionario, BindingResult result, RedirectAttributes attr,
-			ModelMap model, @RequestParam("file") MultipartFile file, @AuthenticationPrincipal UserDetails user) {
+			ModelMap model, @RequestParam(required = false, value ="file") MultipartFile file, @AuthenticationPrincipal UserDetails user) {
 		if (result.hasErrors()) {
 			model.addAttribute("erro", "Preencha os campos em vermelho!");
 			return "funcionario/visualizar";
@@ -75,19 +75,10 @@ public class FuncionarioController {
 				attr.addFlashAttribute("falha", "Erro ao cadastrar foto!");
 			}
 
+		}else {
+			foto = fotoService.buscarFotoId(funcionario.getFoto().getId());
+			funcionario.setFoto(foto);
 		}
-		if (file.isEmpty() && funcionario.hasId()) {
-			foto = funcionario.getFoto().hasId() ? fotoService.buscarFotoId(funcionario.getFoto().getId()) : null;
-
-			if (foto == null) {
-				funcionario.setFoto(null);
-			} else {
-				funcionario.setFoto(foto);
-				fotoService.salvar(foto);
-			}
-
-		}
-
 		service.salvar(funcionario);
 		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso");
 		return "redirect:/funcionarios/dados";
